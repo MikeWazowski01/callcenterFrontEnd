@@ -1,0 +1,34 @@
+<div>
+  @if (isLoading) {
+    <div class="spinner-overlay">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+
+  @if (isBrowser) {
+    <mat-card style="margin: 50px 25px 0 25px; padding-top: -20px">
+      <mat-card-title style="margin: 10px; text-align: center">
+        Incidencias Mesuales
+      </mat-card-title>
+      <mat-card-actions>
+        <div
+          style="
+            width: 100%;
+            max-width: 1000px;
+            margin-left: 80px;
+            padding-top: -30px;
+          "
+        >
+          <h3>INCIDENCIAS - MES {{ nombreMesActual }}</h3>
+          <canvas
+            baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="lineChartType"
+          >
+          </canvas>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

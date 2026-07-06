@@ -1,0 +1,1369 @@
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div
+  style="
+    padding-left: 25px;
+    padding-top: 8px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin-right: 25px;
+    position: sticky;
+  "
+>
+  <button
+    *appHasPermission="'Incidencia:buscarcliente'"
+    matIconButton
+    class="background-transparente pointer"
+    (click)="buscarCliente()"
+    title="Buscar Clientes"
+  >
+    <mat-icon class="u-color-white">search</mat-icon>
+  </button>
+
+  <span style="flex: 1 1 auto"></span>
+
+  <button
+    *appHasPermission="'Incidencia:guardarCrear'"
+    matIconButton
+    class="background-transparente pointer"
+    title="Guardar Información"
+    (click)="guardarIncidencia()"
+  >
+    @if (!isLoadingSave) {
+      <mat-icon class="u-color-white">save</mat-icon>
+    } @else {
+      <mat-spinner
+        class="white-spinner"
+        mode="indeterminate"
+        diameter="30"
+        strokeWidth="3"
+      >
+      </mat-spinner>
+    }
+  </button>
+</div>
+<mat-dialog-content
+  style="padding-top: 10px; padding-left: 10px; padding-right: 10px"
+>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <form [formGroup]="incidenciaForm" (ngSubmit)="guardarIncidencia()">
+        <mat-accordion>
+          <mat-expansion-panel
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+            [expanded]="true"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="u-font-size-title">
+                <mat-icon class="color-general icon_filtro"
+                  >person_check</mat-icon
+                >
+                <span class="color-general" style="padding-left: 10px"
+                  >Datos Personales</span
+                >
+              </mat-panel-title>
+              <mat-panel-description
+                ><span class="color-general">No.Cliente: {{ noCliente }}</span
+                ><span style="width: 100px"></span
+              ></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div style="height: 10px"></div>
+            <div class="form-container" formGroupName="DatosPersonales">
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 35% !important"
+                >
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Nombre"
+                    formControlName="Nombre"
+                    [readonly]="readonly"
+                  />
+                  <mat-error
+                    *ngIf="
+                      incidenciaForm
+                        .get('DatosPersonalesNombre')
+                        ?.hasError('required')
+                    "
+                  >
+                    El nombre es obligatorio
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Apellido Paterno</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Apellido Paterno"
+                    formControlName="ApellidoPaterno"
+                    [readonly]="readonly"
+                  />
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Apellido Materno</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Apellido Materno"
+                    formControlName="ApellidoMaterno"
+                    [readonly]="readonly"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 24% !important"
+                >
+                  <mat-label>INE</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="INE"
+                    formControlName="INE"
+                    [readonly]="readonly"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Fecha Nacimiento</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    placeholder="DD/MM/YYYY"
+                    formControlName="FechaNacimiento"
+                    [readonly]="readonly"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                    [disabled]="readonly"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Telefono</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Telefono"
+                    formControlName="Telefono"
+                    [readonly]="readonly"
+                  />
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Curp</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Curp"
+                    formControlName="Curp"
+                    [readonly]="readonly"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  [className]="pais ? 'contenedor-bloqueado' : ''"
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Pais</mat-label>
+                  <mat-select formControlName="Pais">
+                    @for (pais of Pais; track $index) {
+                      <mat-option [value]="pais.TAPAICOD">{{
+                        pais.TAPAINOM
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Estado</mat-label>
+                  <input
+                    matInput
+                    [formControl]="estadoCtrl"
+                    [matAutocomplete]="autoEstado"
+                    (focus)="mostraropcionesEstados()"
+                    #triggerEstados="matAutocompleteTrigger"
+                    [readonly]="readonly"
+                  />
+
+                  <mat-autocomplete
+                    #autoEstado="matAutocomplete"
+                    [displayWith]="displayEstados"
+                    (optionSelected)="onEstadoChange($event.option.value)"
+                  >
+                    <mat-option
+                      *ngFor="let estad of estadoFilter | async"
+                      [value]="estad"
+                    >
+                      {{ estad.TADEPNOM }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Municipio</mat-label>
+                  <input
+                    formControlName="Municipio"
+                    matInput
+                    [formControl]="municipioCtrl"
+                    [matAutocomplete]="autoMuncipio"
+                    (focus)="mostraropcionesMunicipios()"
+                    #triggerMunicipios="matAutocompleteTrigger"
+                    [readonly]="readonly"
+                  />
+
+                  <mat-autocomplete
+                    #autoMuncipio="matAutocomplete"
+                    [displayWith]="displayMunicipio"
+                    (optionSelected)="onMunicipioChange($event.option.value)"
+                  >
+                    <mat-option
+                      *ngFor="let mun of municipioFilter | async"
+                      [value]="mun"
+                    >
+                      {{ mun.TAMUNNOM }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Localidad</mat-label>
+                  <input
+                    matInput
+                    [formControl]="localidadCtrl"
+                    [matAutocomplete]="autoLocalidad"
+                    (focus)="mostraropcionesLocalidades()"
+                    #triggerLocalidades="matAutocompleteTrigger"
+                    [readonly]="readonly"
+                  />
+
+                  <mat-autocomplete
+                    #autoLocalidad="matAutocomplete"
+                    [displayWith]="displayLocalidad"
+                    (optionSelected)="onLocalidadChange($event.option.value)"
+                  >
+                    <mat-option
+                      *ngFor="let loc of localidadFilter | async"
+                      [value]="loc"
+                    >
+                      {{ loc.TABARNOM }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 70% !important"
+                >
+                  <mat-label>Direccion</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Direccion"
+                    formControlName="Direccion"
+                    [readonly]="readonly"
+                  ></textarea>
+                </mat-form-field>
+                <div style="color: red">
+                  <mat-checkbox
+                    [className]="checkCliente ? 'contenedor-bloqueado' : ''"
+                    formControlName="EsCliente"
+                    style="color: green !important"
+                    >Es Cliente</mat-checkbox
+                  >
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-divider style="padding: 5px"></mat-divider>
+        <mat-accordion *ngIf="isCliente">
+          <mat-expansion-panel
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="u-font-size-title">
+                <mat-icon class="color-general icon_filtro"
+                  >request_quote</mat-icon
+                >
+                <span class="color-general" style="padding-left: 10px"
+                  >Datos del Credito</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="height: 10px"></div>
+            <div class="form-container" formGroupName="DatosCredito">
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Grupo</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Grupo"
+                    formControlName="Grupo"
+                    [readonly]="isCliente"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Ciclo</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Ciclo"
+                    formControlName="Ciclo"
+                    [readonly]="isCliente"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 40% !important"
+                >
+                  <mat-label>Oficial</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Oficial"
+                    formControlName="Oficial"
+                    [readonly]="isCliente"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Sucursal</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Sucursal"
+                    formControlName="Sucursal"
+                    [readonly]="isCliente"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="form-row"></div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-divider style="padding: 5px"></mat-divider>
+        <mat-accordion>
+          <mat-expansion-panel
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="u-font-size-title">
+                <mat-icon class="color-general icon_filtro">emergency</mat-icon>
+                <span class="color-general" style="padding-left: 10px"
+                  >Datos Incidencia</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="height: 10px"></div>
+            <div class="form-container" formGroupName="DatosIncidencia">
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 35% !important"
+                >
+                  <mat-label>Motivo Llamada</mat-label>
+                  <input
+                    matInput
+                    [formControl]="llamadaCtrl"
+                    [matAutocomplete]="autollamada"
+                    (focus)="mostraropcionesLlamadaCategoria()"
+                    #triggerLlamadaCategoria="matAutocompleteTrigger"
+                  />
+
+                  <mat-autocomplete
+                    #autollamada="matAutocomplete"
+                    [displayWith]="displayLlamadaCategoria"
+                    (optionSelected)="
+                      onLlamadaCategoriaChange($event.option.value)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let res of llamadaFilter | async"
+                      [value]="res"
+                    >
+                      {{ res.Codigo }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field
+                  [className]="
+                    readonlyHomologacion ? 'contenedor-bloqueadoCaso' : ''
+                  "
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 62% !important"
+                >
+                  <mat-label>Caso</mat-label>
+                  <input
+                    matInput
+                    [formControl]="CasoCtrl"
+                    [matAutocomplete]="autocaso"
+                    (focus)="mostraropcionesCasoCategoria()"
+                    #triggerCasoCategoria="matAutocompleteTrigger"
+                  />
+
+                  <mat-autocomplete
+                    #autocaso="matAutocomplete"
+                    [displayWith]="displayCasoCategoria"
+                    (optionSelected)="
+                      onCasoCategoriaChange($event.option.value)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let res of CasoFilter | async"
+                      [value]="res"
+                    >
+                      {{ res.Codigo }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field
+                  [className]="readonlyTipoH ? 'contenedor-bloqueado' : ''"
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Tipo Homologación</mat-label>
+                  <mat-select formControlName="TipoHomologacion">
+                    @for (tipohomo of TipoHomologacion; track tipohomo) {
+                      <mat-option
+                        [value]="tipohomo.IdTipoHomologacionCategoria"
+                        >{{ tipohomo.Codigo }}</mat-option
+                      >
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                  [className]="readonlyH ? 'contenedor-bloqueado' : ''"
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 67% !important"
+                >
+                  <mat-label>Homologación</mat-label>
+                  <mat-select
+                    formControlName="Homologacion"
+                    [ngClass]="{ 'select-readonly': readonlyH }"
+                  >
+                    @for (homo of Homologacion; track homo) {
+                      <mat-option [value]="homo.IdHomologacionCategoria">{{
+                        homo.Codigo
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              @if (otroTipoLlamada == true) {
+                <div class="form-row" style="padding-left: 50px">
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field"
+                    style="width: 85% !important"
+                  >
+                    <mat-label>Otro Tipo de Llamada</mat-label>
+                    <input
+                      class="mayus_input"
+                      matInput
+                      placeholder="Otro Tipo de Llamada"
+                      formControlName="OtraLlamada"
+                    />
+                  </mat-form-field>
+                </div>
+              }
+
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 18% !important"
+                >
+                  <mat-label>Categoria</mat-label>
+                  <mat-select formControlName="Categoria">
+                    @for (categoria of Categorias; track categoria) {
+                      <mat-option [value]="categoria.IdCategoria">{{
+                        categoria.Codigo
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Prioridad</mat-label>
+                  <mat-select formControlName="Prioridad">
+                    @for (
+                      prioridad of Prioridades;
+                      track prioridad.IdPrioridad
+                    ) {
+                      <mat-option [value]="prioridad.IdPrioridad">{{
+                        prioridad.Codigo
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 24% !important"
+                >
+                  <mat-label>Responsable</mat-label>
+                  <input
+                    matInput
+                    [formControl]="responsableCtrl"
+                    [matAutocomplete]="autoResponsable"
+                    (focus)="mostraropcionesResponsables()"
+                    #triggerResponsables="matAutocompleteTrigger"
+                  />
+
+                  <mat-autocomplete
+                    #autoResponsable="matAutocomplete"
+                    [displayWith]="displayResponsables"
+                  >
+                    <mat-option
+                      *ngFor="let res of responsableFilter | async"
+                      [value]="res"
+                    >
+                      {{ res.NombreResponsable }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Estatus</mat-label>
+                  <mat-select formControlName="Estatus">
+                    @for (estatus of Estatus; track estatus.IdEstatus) {
+                      <mat-option [value]="estatus.IdEstatus">{{
+                        estatus.Codigo
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Fecha Inicio</mat-label>
+                  <input
+                    matInput
+                    placeholder="Fecha Inicio"
+                    formControlName="FechaInicio"
+                    [readonly]="fechaHora"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Hora Inicio</mat-label>
+                  <input
+                    matInput
+                    placeholder="Hora Inicio"
+                    formControlName="HoraInicio"
+                    [readonly]="fechaHora"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Fecha Fin</mat-label>
+                  <input
+                    matInput
+                    placeholder="Fecha Fin"
+                    formControlName="FechaFin"
+                    [readonly]="fechaHora"
+                  />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 20% !important"
+                >
+                  <mat-label>Hora Fin</mat-label>
+                  <input
+                    matInput
+                    placeholder="Hora Fin"
+                    formControlName="HoraFin"
+                    [readonly]="fechaHora"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Descripción de la Incidencia</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Detalle Incidencia"
+                    style="resize: none !important"
+                    formControlName="DescripcionIncidencia"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Análisis / Origen del Problema </mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Análisis / Origen del Problema"
+                    style="resize: none !important"
+                    formControlName="AnalisisOrigen"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Solucion y/o Acuerdo</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Solucion y/o Acuerdo"
+                    style="resize: none !important"
+                    formControlName="Acuerdo"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Compromiso para la mejora</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Compromiso para la mejora"
+                    style="resize: none !important"
+                    formControlName="Compromiso"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Satisfacción del Cliente</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Satisfacción del Cliente"
+                    style="resize: none !important"
+                    formControlName="satisfaccion"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-divider style="padding: 5px"></mat-divider>
+        <mat-accordion>
+          <mat-expansion-panel
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="u-font-size-title">
+                <mat-icon class="color-general icon_filtro"
+                  >support_agent</mat-icon
+                >
+                <span class="color-general" style="padding-left: 10px"
+                  >Agente Asignado</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="height: 10px"></div>
+            <div class="form-container">
+              <form [formGroup]="agentesForm" (ngSubmit)="guardarAgente()">
+                <div class="form-row" style="padding-left: 50px">
+                  <mat-form-field
+                    appearance="outline"
+                    style="width: 35% !important"
+                  >
+                    <mat-label>Agente</mat-label>
+                    <input
+                      matInput
+                      [formControl]="agenteAsignadoCtrl"
+                      [matAutocomplete]="autoAgenteAsignado"
+                      (focus)="mostraropcionesAgentesAsignado()"
+                      #triggerAgentesAsignado="matAutocompleteTrigger"
+                    />
+
+                    <mat-autocomplete
+                      #autoAgenteAsignado="matAutocomplete"
+                      [displayWith]="displayAgentesAsignados"
+                      (optionSelected)="
+                        onSelectionAgentesAsignados($event.option.value)
+                      "
+                    >
+                      <mat-option
+                        *ngFor="let ageAsi of agenteAsignadoFilter | async"
+                        [value]="ageAsi"
+                      >
+                        {{ ageAsi.NombreAgente }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <!--<mat-form-field
+                    appearance="outline"
+                    style="width: 30% !important"
+                  >
+                    <mat-label>Agente</mat-label>
+                    <mat-select
+                      formControlName="Agente"
+                      (selectionChange)="onSelectionResponsable($event.value)"
+                    >
+                      @for (
+                        responsable of CataResponsables;
+                        track responsable.IdResponsable
+                      ) {
+                        <mat-option [value]="responsable">{{
+                          responsable.Nombre
+                        }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>-->
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field"
+                    style="width: 30% !important"
+                  >
+                    <mat-label>Sucursal</mat-label>
+                    <input
+                      matInput
+                      placeholder="Sucursal"
+                      formControlName="SucursalAgente"
+                      [value]="sucursal"
+                    />
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field"
+                    style="width: 29% !important"
+                  >
+                    <mat-label>Puesto</mat-label>
+                    <input
+                      matInput
+                      placeholder="Puesto"
+                      formControlName="Puesto"
+                      [value]="puesto"
+                    />
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field"
+                    style="width: 24% !important"
+                  >
+                    <mat-label>Email</mat-label>
+                    <input
+                      matInput
+                      placeholder="Email"
+                      formControlName="Email"
+                      [value]="email"
+                    />
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    style="width: 20% !important"
+                  >
+                    <mat-label>Tipo Envio</mat-label>
+                    <mat-select formControlName="TipoEnvio">
+                      @for (
+                        tipoEnv of TipoEnvioEmail;
+                        track tipoEnv.IdTipoEnvio
+                      ) {
+                        <mat-option [value]="tipoEnv.IdTipoEnvio">{{
+                          tipoEnv.Codigo
+                        }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  <div style="padding-top: -10px">
+                    <button
+                      type="submit"
+                      mat-raised-button
+                      color="primary"
+                      style="
+                        border-radius: 0px;
+                        background: #000580;
+                        width: 100px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 40px;
+                        border: 0px;
+                        border-radius: 4px;
+                      "
+                    >
+                      <mat-icon class="u-color-white">person_add</mat-icon>
+                      <span class="u-color-white" style="margin-left: 8px"
+                        >Agregar</span
+                      >
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-row"></div>
+              </form>
+            </div>
+            <div
+              class="form-container"
+              style="padding-right: 20px; padding-left: 20px; padding-top: 2px"
+            >
+              <mat-card
+                class="example-card"
+                appearance="outlined"
+                style="
+                  padding-left: 20px !important;
+                  padding-right: 20px !important;
+                "
+              >
+                <mat-card-header>
+                  <mat-card-title>
+                    <h1 class="color-general u-font-size-title">
+                      Lista de Responsables
+                    </h1>
+                  </mat-card-title>
+                  <span style="flex: 1 1 auto"></span>
+                  <mat-divider></mat-divider>
+                </mat-card-header>
+                <mat-card-content>
+                  <mat-divider></mat-divider>
+                  <div class="scroll-container">
+                    <mat-table [dataSource]="dataSource" matSort>
+                      <ng-container matColumnDef="acciones">
+                        <mat-header-cell
+                          class="col-angosta-accion-agente table-header"
+                          *matHeaderCellDef
+                        ></mat-header-cell>
+                        <mat-cell
+                          class="col-angosta-accion-agente"
+                          *matCellDef="let element"
+                        >
+                          <button
+                            type="button"
+                            title="Eliminar"
+                            mat-icon-button
+                            style="background: transparent; border: 0px"
+                            (click)="removeAgenteData(element)"
+                          >
+                            <mat-icon class="color-delete">delete</mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="responsable">
+                        <mat-header-cell
+                          class="table-header"
+                          *matHeaderCellDef
+                          mat-sort-header
+                        >
+                          Responsable
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                          {{ element.NombreAgente }}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="sucursal">
+                        <mat-header-cell
+                          class="table-header"
+                          *matHeaderCellDef
+                          mat-sort-header
+                        >
+                          Sucursal
+                        </mat-header-cell>
+                        <mat-cell class="col-ancha" *matCellDef="let element">
+                          {{ element.Sucursal }}
+                        </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="puesto">
+                        <mat-header-cell
+                          class="table-header"
+                          *matHeaderCellDef
+                          mat-sort-header
+                        >
+                          Puesto
+                        </mat-header-cell>
+                        <mat-cell class="col-ancha" *matCellDef="let element">
+                          {{ element.Puesto }}
+                        </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="email">
+                        <mat-header-cell
+                          class="table-header"
+                          *matHeaderCellDef
+                          mat-sort-header
+                        >
+                          Email
+                        </mat-header-cell>
+                        <mat-cell
+                          class="table-center"
+                          style="margin-left: -5px"
+                          *matCellDef="let element"
+                        >
+                          {{ element.Email }}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="tipoenvio">
+                        <mat-header-cell
+                          class="table-header"
+                          *matHeaderCellDef
+                          mat-sort-header
+                        >
+                          Tipo Envio
+                        </mat-header-cell>
+                        <mat-cell
+                          class="table-center"
+                          style="margin-left: -5px"
+                          *matCellDef="let element"
+                        >
+                          {{ element.TipoEnvio }}
+                        </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row
+                        *matHeaderRowDef="displayedColumns; sticky: true"
+                      ></mat-header-row>
+                      <mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                        class="hoverable-row"
+                      >
+                      </mat-row>
+                    </mat-table>
+                  </div>
+                </mat-card-content>
+                <mat-card-actions> </mat-card-actions>
+              </mat-card>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-divider style="padding: 5px"></mat-divider>
+        <mat-accordion>
+          <mat-expansion-panel
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="u-font-size-title">
+                <mat-icon class="color-general icon_filtro"
+                  >emergency_recording</mat-icon
+                >
+                <span class="color-general" style="padding-left: 10px"
+                  >Evidencias</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="height: 10px"></div>
+            <div class="form-container" formGroupName="DatosEvidencias">
+              <form>
+                <div class="form-row" style="padding-left: 50px">
+                  <mat-form-field appearance="outline" style="width: 75%">
+                    <mat-label>Seleccionar archivo</mat-label>
+                    <input matInput [readonly]="true" />
+                    <input
+                      type="file"
+                      #fileInput
+                      style="display: none"
+                      (change)="onFileSelected($event)"
+                      accept="image/*,.pdf,audio/*,.ogg, audio/ogg, video/ogg"
+                    />
+                    <button
+                      type="button"
+                      mat-icon-button
+                      matSuffix
+                      (click)="fileInput.click()"
+                      style="background: transparent; border: 0px"
+                    >
+                      <mat-icon class="color-general icon_filtro"
+                        >attach_file</mat-icon
+                      >
+                    </button>
+                    <mat-hint>Max. 10MB</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div
+                  class="form-container"
+                  style="
+                    padding-right: 20px;
+                    padding-left: 20px;
+                    padding-top: 2px;
+                  "
+                >
+                  <mat-card
+                    class="example-card"
+                    appearance="outlined"
+                    style="
+                      padding-left: 20px !important;
+                      padding-right: 20px !important;
+                    "
+                  >
+                    <mat-card-header>
+                      <mat-card-title>
+                        <h1 class="color-general u-font-size-title">
+                          Lista de Evidencias
+                        </h1>
+                      </mat-card-title>
+                      <span style="flex: 1 1 auto"></span>
+                      <mat-divider></mat-divider>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <mat-divider></mat-divider>
+                      <div class="scroll-container">
+                        <mat-table [dataSource]="dataSourceFile" matSort>
+                          <ng-container matColumnDef="acciones">
+                            <mat-header-cell
+                              class="col-angosta-accion table-header"
+                              *matHeaderCellDef
+                              >Acciones</mat-header-cell
+                            >
+                            <mat-cell
+                              class="col-angosta-accion"
+                              *matCellDef="let element"
+                            >
+                              <button
+                                type="button"
+                                title="Eliminar"
+                                mat-icon-button
+                                style="background: transparent; border: 0px"
+                                (click)="removeFile(element)"
+                              >
+                                <mat-icon class="color-delete">delete</mat-icon>
+                              </button>
+
+                              <button
+                                type="button"
+                                title="Ver"
+                                mat-icon-button
+                                style="background: transparent; border: 0px"
+                                (click)="verFile(element)"
+                              >
+                                <mat-icon class="color-general"
+                                  >preview</mat-icon
+                                >
+                              </button>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell
+                              class="table-header"
+                              *matHeaderCellDef
+                              mat-sort-header
+                            >
+                              Nombre
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                              {{ element.NombreArchivo }}
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="tipo">
+                            <mat-header-cell
+                              class="table-header"
+                              *matHeaderCellDef
+                              mat-sort-header
+                            >
+                              Tipo
+                            </mat-header-cell>
+                            <mat-cell
+                              class="col-ancha"
+                              *matCellDef="let element"
+                            >
+                              {{ element.Tipo }}
+                            </mat-cell>
+                          </ng-container>
+
+                          <mat-header-row
+                            *matHeaderRowDef="
+                              displayedColumnsFile;
+                              sticky: true
+                            "
+                          ></mat-header-row>
+                          <mat-row
+                            *matRowDef="let row; columns: displayedColumnsFile"
+                            class="hoverable-row"
+                          >
+                          </mat-row>
+                        </mat-table>
+                      </div>
+                    </mat-card-content>
+                    <mat-card-actions> </mat-card-actions>
+                  </mat-card>
+                </div>
+              </form>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+      <mat-divider style="padding: 5px"></mat-divider>
+      <mat-tab-group>
+        <mat-tab label="SEGUIMIENTO" class="tab-seguimiento">
+          <div style="padding-top: 10px">
+            <mat-card
+              style="border: 0px; border-radius: 0px; background: #faf9fd"
+            >
+              <mat-card-header>
+                <div mat-card-avatar>
+                  <button
+                    class="btn_add_lista pointer"
+                    title="Agregar Seguimiento"
+                    (click)="agregarSeguimiento()"
+                  >
+                    <mat-icon class="color-general icon_add_lista"
+                      >assignment_add</mat-icon
+                    >
+                  </button>
+                </div>
+                <mat-card-title
+                  class="card-title-listado"
+                  style="margin-top: 8px"
+                >
+                  <span class="color-general u-font-size-title"
+                    >Nuevo Seguimiento</span
+                  >
+                </mat-card-title>
+              </mat-card-header>
+              <div style="height: 30px"></div>
+              <mat-card-content>
+                <mat-card-content>
+                  @for (
+                    seguimiento of Seguimientos;
+                    track seguimiento.IdSeguimiento
+                  ) {
+                    <mat-accordion>
+                      <mat-expansion-panel
+                        [expanded]="panelOpenState()"
+                        (opened)="panelOpenState.set(true)"
+                        (closed)="panelOpenState.set(false)"
+                      >
+                        <mat-expansion-panel-header>
+                          <mat-panel-title class="u-font-size-title">
+                            <mat-icon class="color-general icon_filtro"
+                              >speaker_notes</mat-icon
+                            >
+                            <span
+                              class="color-general"
+                              style="padding-left: 10px; font-size: 12px"
+                              >{{ seguimiento.Usuario }}</span
+                            >
+                          </mat-panel-title>
+                          <mat-panel-description
+                            class="color-general info-linea"
+                          >
+                            <span
+                              >Publicado:
+                              {{
+                                seguimiento.FechaRegistro
+                                  | date: "d 'de' MMMM y"
+                              }}</span
+                            >
+                            <!-- <span>Estatus: {{ seguimiento.Estatus }}</span>
+                            <span>Categoria: {{ seguimiento.Categoria }}</span>-->
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div
+                          class="form-container"
+                          style="
+                            padding-left: 20px;
+                            padding-right: 10px;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                          "
+                        >
+                          {{ seguimiento.Descripcion }}
+                        </div>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                    <div style="height: 20px"></div>
+                  }
+                </mat-card-content>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+        <mat-tab label="VERIFICACIÓN" class="tab-seguimiento">
+          <div style="padding-top: 10px">
+            <mat-card
+              style="border: 0px; border-radius: 0px; background: #faf9fd"
+            >
+              <mat-card-header>
+                <div mat-card-avatar>
+                  <button
+                    class="btn_add_lista"
+                    title="Agregar Verificación"
+                    (click)="agregarVerificacion()"
+                  >
+                    <mat-icon class="color-general icon_add_lista"
+                      >playlist_add_circle</mat-icon
+                    >
+                  </button>
+                </div>
+                <mat-card-title
+                  class="card-title-listado"
+                  style="margin-top: 8px"
+                >
+                  <span class="color-general u-font-size-title"
+                    >Nueva Verificacion</span
+                  >
+                </mat-card-title>
+              </mat-card-header>
+              <div style="height: 30px"></div>
+              <mat-card-content>
+                @for (
+                  verificacion of Verificacion;
+                  track verificacion.IdVerificacion
+                ) {
+                  <mat-accordion>
+                    <mat-expansion-panel
+                      (opened)="panelOpenState.set(true)"
+                      (closed)="panelOpenState.set(false)"
+                    >
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="u-font-size-title">
+                          <mat-icon class="color-general icon_filtro"
+                            >fact_check</mat-icon
+                          >
+                          <span class="color-general" style="padding-left: 10px"
+                            >Verificacion dia
+                            {{ verificacion.DiaVerificacion }}</span
+                          >
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div style="height: 10px"></div>
+                      <div class="form-container">
+                        {{ verificacion.Descripcion }}
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                  <div style="height: 20px"></div>
+                }
+
+                <!-- <mat-accordion>
+                  <mat-expansion-panel
+                    (opened)="panelOpenState.set(true)"
+                    (closed)="panelOpenState.set(false)"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="u-font-size-title">
+                        <mat-icon class="color-general icon_filtro"
+                          >fact_check</mat-icon
+                        >
+                        <span class="color-general" style="padding-left: 10px"
+                          >Verificacion dia 2</span
+                        >
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div style="height: 10px"></div>
+                    <div class="form-container"></div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+                <div style="height: 20px"></div>
+                <mat-accordion>
+                  <mat-expansion-panel
+                    (opened)="panelOpenState.set(true)"
+                    (closed)="panelOpenState.set(false)"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="u-font-size-title">
+                        <mat-icon class="color-general icon_filtro"
+                          >fact_check</mat-icon
+                        >
+                        <span class="color-general" style="padding-left: 10px"
+                          >Verificacion dia 1</span
+                        >
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div style="height: 10px"></div>
+                    <div class="form-container"></div>
+                  </mat-expansion-panel>
+                </mat-accordion>-->
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>

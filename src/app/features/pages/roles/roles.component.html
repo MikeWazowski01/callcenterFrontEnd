@@ -1,0 +1,206 @@
+<div style="padding-top: 20px">
+  @if (isLoading) {
+    <div
+      [ngClass]="{
+        'spinner-overlay': !isLoadigbuscarLimpiar,
+        'spinner-overlay-true': isLoadigbuscarLimpiar,
+      }"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+
+  <mat-accordion>
+    <mat-expansion-panel
+      (opened)="panelOpenState.set(true)"
+      (closed)="panelOpenState.set(false)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title class="u-font-size-title">
+          <mat-icon class="color-general icon_filtro">filter_alt</mat-icon>
+          <span class="color-general">Filtro</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div style="height: 10px"></div>
+      <div class="form-container">
+        <form [formGroup]="filtroForm" (ngSubmit)="buscarFiltro()">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Rol</mat-label>
+              <input matInput placeholder="Rol" formControlName="NombreRol" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Registro</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                placeholder="DD/MM/YYYY"
+                formControlName="FechaRegistro"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Estatus</mat-label>
+              <mat-select formControlName="Estatus">
+                <mat-option value="1">ACTIVO</mat-option>
+                <mat-option value="0">INACTIVO</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              padding: 10px 30px 0px 30px;
+            "
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              style="border-radius: 0px; background: #000580; width: 130px"
+              type="submit"
+            >
+              <mat-icon>search</mat-icon
+              ><span class="u-color-white">Buscar</span>
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              style="border-radius: 0px; background: #000580; width: 130px"
+              type="button"
+              (click)="limpiarFormualrio()"
+            >
+              <mat-icon>cleaning_services</mat-icon
+              ><span class="u-color-white">Limpiar</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<div style="height: 10px"></div>
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <button
+        class="btn_add_lista pointer"
+        (click)="nuevoRol()"
+        title="Nueva Incidencia"
+      >
+        <mat-icon class="color-general icon_add_lista">add_box</mat-icon>
+      </button>
+    </div>
+    <mat-card-title class="card-title-listado">
+      <h1 class="color-general u-font-size-title">Lista de Roles</h1>
+    </mat-card-title>
+    <span style="flex: 1 1 auto"></span>
+    <div>
+      <button
+        class="btn_add_lista pointer"
+        (click)="limpiarFormualrio()"
+        title="Nuevo Rol"
+      >
+        <mat-icon class="color-general icon_add_lista">autorenew</mat-icon>
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-divider></mat-divider>
+    <div class="scroll-container">
+      <mat-table [dataSource]="dataSource" matSort>
+        <!--Acciones-->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell
+            class="col-angosta-accion table-header"
+            *matHeaderCellDef
+            >Acciones</mat-header-cell
+          >
+          <mat-cell class="col-angosta-accion" *matCellDef="let element">
+            <button
+              title="Ver Datos Incidecia"
+              mat-icon-button
+              (click)="rolEditar(element)"
+              mat-icon-button
+            >
+              <mat-icon class="color-general">edit</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <!-- Columna Nombre -->
+        <ng-container matColumnDef="nombreRol">
+          <mat-header-cell
+            class="table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Nombre Rol
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.NombreRol }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- Columna País -->
+        <ng-container matColumnDef="fechaRegistro">
+          <mat-header-cell
+            class="table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            FechaRegistro
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.FechaRegistro | date: "short" }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- Columna País -->
+        <ng-container matColumnDef="estatus">
+          <mat-header-cell
+            class="table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Estatus
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.EstatusNombre }}
+          </mat-cell>
+        </ng-container>
+        <!-- Encabezados y filas -->
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="hoverable-row"
+        >
+        </mat-row>
+      </mat-table>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <mat-paginator
+      #paginator
+      class="demo-paginator"
+      (page)="handlePageEvent($event)"
+      [length]="length"
+      [pageSize]="pageSize"
+      [disabled]="disabled"
+      [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+      [hidePageSize]="hidePageSize"
+      [pageIndex]="pageIndex"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </mat-card-actions>
+</mat-card>

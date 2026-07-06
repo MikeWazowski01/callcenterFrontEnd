@@ -1,0 +1,547 @@
+/*--------------------------------------------------Toolbar--------------------------------------------------*/
+.toolbar {
+  background: #000580 !important;
+  width: 100% !important;
+  height: 60px !important;
+  position: fixed !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/*Para el Logo de Conserva*/
+.toolbar__img {
+  padding-top: 10px;
+  margin-left: -12px !important;
+  padding-bottom: 8px !important;
+}
+
+.toolbar__img--small {
+  width: 50px !important;
+}
+
+.toolbar__img--big {
+  width: 180px !important;
+  padding-top: 10px !important;
+}
+
+/*Fin Para el Logo de Conserva*/
+
+.toolbar__title {
+  margin-left: 50px;
+}
+
+.toolbar__user-name {
+  color: white;
+  padding-top: 0px !important;
+  font-size: 16px;
+}
+
+.icon_subtitulos {
+  font-size: 25px !important;
+}
+.toolbar__user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 5px;
+}
+
+/*--------------------------------------------------Fin Toolbar--------------------------------------------------*/
+
+/*--------------------------------------------------Contenido--------------------------------------------------*/
+.content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: red !important;
+  overflow: hidden !important;
+}
+
+.content__main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 50px 20px 24px 15px;
+  /*top button der iz */
+  background: #f0f0f0;
+  height: 100%;
+}
+.content__main.content-expanded {
+  padding-left: 15%;
+}
+
+/*-------------------------------------------------- Fin Contenido--------------------------------------------------*/
+
+/*--------------------------------------------------Generales--------------------------------------------------*/
+.u-color-white {
+  color: white !important;
+}
+
+.u-spacer {
+  flex: 1 !important;
+}
+
+.u-font-size {
+  font-size: 16px !important;
+}
+
+.titulo_principal {
+  font-size: 36px;
+}
+
+.u-font-size-title {
+  font-size: 25px !important;
+}
+.texto_negritas {
+  font-weight: bold !important;
+}
+
+.mat-divider {
+  border-top-color: white !important;
+}
+
+.color-general {
+  color: #000580 !important;
+}
+
+.color-generalSubMenu {
+  color: #115035 !important;
+}
+
+.color-generalOpciones {
+  color: #d95723 !important;
+}
+h1 {
+  font-weight: normal !important;
+}
+
+.info-linea {
+  display: flex;
+  gap: 5rem; /* Espacio entre columnas, puedes ajustar */
+}
+
+.background-general {
+  background: #000580;
+}
+
+.background-transparente {
+  background: #000580;
+  border: 0px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  padding-top: 5px;
+}
+.pointer {
+  cursor: pointer;
+}
+
+.button-login:hover {
+  background: #161a94 !important;
+}
+/*--------------------------------------------------Fin Generales--------------------------------------------------*/
+/*filters*/
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0px 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  margin-top: -10px !important;
+}
+
+.spinner-overlay {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner-overlay-buscar {
+  position: absolute;
+  top: -180px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner-overlay-true {
+  display: none;
+  /* position: absolute;
+  top: -250px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;*/
+}
+
+/*--------------------------------------------------Clases Externas ::ng-deep ------------------------------------------------*/
+
+.mat-expansion-panel-body {
+  padding: 0px !important;
+}
+/*altura de lso submenus*/
+.mat-expansion-panel-header {
+  height: var(--mat-expansion-header-collapsed-state-height, 37px) !important;
+  margin-bottom: -15px !important;
+}
+/*menus dentro del submenu*/
+.mdc-list-item.mdc-list-item--with-one-line {
+  height: var(--mdc-list-list-item-one-line-container-height, 37px) !important;
+}
+.sidebar__expansion-panel .mat-expansion-indicator svg {
+  width: 20px !important;
+  height: 20px !important;
+  /* vertical-align: middle;
+  margin-left: -10px !important;*/
+  fill: white !important;
+}
+
+/*
+.mat-accordion .mat-expansion-panel:first-of-type {
+  border-top-right-radius: var(--mat-expansion-container-shape, 0px) !important;
+  border-top-left-radius: var(--mat-expansion-container-shape, 0px) !important;
+}*/
+/*Cuando se expande el menu el texto del contenido se recorre a la derecha*/
+
+.mat-mdc-nav-list .mat-mdc-list-item {
+  border-radius: 0px !important;
+}
+
+/*icon de logoaut*/
+.mat-mdc-button > .mat-icon,
+.mat-mdc-unelevated-button > .mat-icon,
+.mat-mdc-raised-button > .mat-icon,
+.mat-mdc-outlined-button > .mat-icon {
+  color: white;
+  font-size: 2rem !important;
+  height: 2rem !important;
+  width: 2rem !important;
+}
+/*icons*/
+.icon_filtro {
+  font-size: 30px !important;
+  height: 30px !important;
+  width: 30px !important;
+}
+.icon_add_lista {
+  font-size: 40px !important;
+  height: 39px !important;
+  width: 39px !important;
+}
+.btn_add_lista {
+  background: transparent;
+  border: 0px;
+  cursor: pointer;
+}
+/*Menu logoaut*/
+.mat-mdc-menu-content {
+  background: #000580 !important;
+  padding: 5px 0 !important;
+}
+.mat-mdc-menu-item {
+  min-height: 40px !important;
+}
+
+.mat-mdc-menu-item:hover {
+  background: #04107b !important;
+}
+/*--------------------------------------------------Fin Clases Externas--------------------------------------------------*/
+
+/*Menu de session*/
+.mat__menu-name {
+  margin-left: -5px;
+}
+
+/*--------------------------------------------------Scroll--------------------------------------------------*/
+.sidenav {
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #001ba1; /* thumb, track */
+
+  /* WebKit (Chrome, Edge, Safari) */
+}
+
+.sidenav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidenav::-webkit-scrollbar-track {
+  background: #001ba1; /* fondo del scroll */
+}
+
+.sidenav::-webkit-scrollbar-thumb {
+  background-color: #ffffff; /* el scroll en sí */
+  border-radius: 4px;
+  border: 1px solid #001ba1;
+}
+/*--------------------------------------------------Fin Scroll--------------------------------------------------*/
+
+/*-------------------Filtros--------------------*/
+/*.expansion-filtros, .mat-expansion-panel-header{
+          padding: 10px 0px;
+          margin-top: -10px;
+}
+
+/*Text Froms*/
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--mdc-outlined-text-field-label-text-color, #001ba1) !important;
+}
+
+/* Container for the entire filter form to add padding */
+/*.filter-form-container {
+  padding: 10px 24px 0; /* Adjust padding to match Material Design spacing */
+//}
+
+/*.mat-expansion-panel-header {
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
+}*/
+
+/*
+.title-filtro{
+  font-size: 30px;
+}
+
+.mdc-text-field .mdc-floating-label {
+    top: 60%!important;
+
+}
+.fila{
+  padding-bottom: 25px; /* espacio entre filas */
+//}*/
+/*
+.mdc-text-field--outlined .mdc-floating-label {
+  font-size: 10px!important;
+}
+*/ /*
+div.mat-mdc-select-panel{
+  background-color: white!important;
+ }
+
+
+ .mdc-list-item__primary-text, .mat-mdc-select  {
+  color:#001ba1!important;
+  padding-top: -10px!important;
+ }
+
+
+ .results-container{
+  margin-top: 15px;
+ }
+
+ .content-result{
+  height: 400px;
+ }*/
+/*ccccaaaa*/
+/*
+ .mat-mdc-text-field-wrapper {
+    height: 40px!important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: var(--mdc-outlined-text-field-label-text-color, #001ba1)!important;
+
+}
+.mat-expansion-panel-header {
+   height: var(--mat-expansion-header-collapsed-state-height, 50px) !important;
+    margin-bottom: -8px !important;
+}
+
+
+.icon-expanden .mat-expansion-indicator svg {
+    fill: #005cbb !important;
+}
+
+.small-form-field .mat-form-field-infix {
+  padding: 0.3em 0 0.2em 0!important;
+}
+
+.small-form-field .mat-input-element {
+  font-size: 8px!important;
+  height: px!important;
+}
+**/
+/*
+.mdc-floating-label {
+    padding-bottom: 20px!important;
+}*/
+
+.mat-expansion-panel-header {
+  height: var(--mat-expansion-header-collapsed-state-height, 50px) !important;
+  margin-bottom: -8px !important;
+  padding: 0 14px !important;
+}
+
+.mat-mdc-form-field-infix {
+  width: 15rem !important;
+}
+
+/* Fondo azul oscuro para el panel del calendario */
+.mat-datepicker-content {
+  background-color: #001ba1 !important;
+  color: white;
+}
+
+/* Números de días en blanco */
+.mat-calendar-body-cell-content {
+  color: white !important;
+}
+
+/* Día seleccionado: fondo blanco y texto azul oscuro */
+.mat-calendar-body-selected {
+  background-color: white !important;
+  color: #001ba1 !important;
+}
+
+/* Hover sobre días */
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  .mat-calendar-body-cell-content {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Botones de navegación (flechas) en blanco */
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  color: white;
+}
+
+/* Botones de acción ("HOY", "BORRAR") en blanco */
+.mat-datepicker-actions .mdc-button {
+  color: white;
+}
+
+.mat-mdc-button:not(:disabled) {
+  color: white !important;
+}
+
+.mat-calendar-body-label {
+  color: var(--mat-datepicker-calendar-body-label-text-color, white) !important;
+}
+.mat-calendar-table-header th {
+  color: var(--mat-datepicker-calendar-header-text-color, white) !important;
+}
+
+.mat-datepicker-content
+  .mat-calendar-previous-button:not(.mat-mdc-button-disabled),
+.mat-datepicker-content
+  .mat-calendar-next-button:not(.mat-mdc-button-disabled) {
+  color: var(
+    --mat-datepicker-calendar-navigation-button-icon-color,
+    white
+  ) !important;
+}
+
+.mat-calendar-arrow {
+  display: inline-block;
+  width: 10px;
+  height: 5px;
+  margin: 0 0 0 5px;
+  vertical-align: middle;
+  fill: var(
+    --mat-datepicker-calendar-period-button-icon-color,
+    white
+  ) !important;
+}
+
+/*avisos*/
+.custom-snackbar {
+  background-color: transparent !important; /* transparente para que el contenedor se vea */
+}
+
+.custom-snackbar .mat-mdc-snackbar-surface {
+  background-color: #000580 !important; /* tu color marrón */
+  color: white !important; /* texto blanco */
+}
+
+/*Table*/
+.table-header {
+  background: #000580 !important;
+  color: #ffffff !important;
+  /* text-align: center;
+  justify-content: center!important;  */
+}
+
+.color-delete {
+  color: rgb(225, 64, 64);
+}
+
+.col-angosta-accion {
+  width: 150px;
+  max-width: 150px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonSave {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000580 !important;
+  width: 100%;
+  height: 35px;
+  border: transparent;
+  border-radius: 15px;
+}
+.buttonSave:hover {
+  background: #161a94 !important;
+}
+
+.iconButton {
+  margin-right: 10px;
+}
+
+.spanButton {
+  margin-top: 5px;
+}
+
+.cdk-overlay-pane.custom-dialog-container-aviso {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 25vh !important; /* Fuerza altura completa de la pantalla */
+  border-radius: 0px !important;
+}
+
+.white-spinner circle {
+  stroke: white !important;
+}
+
+.mayus_textarea[matInput] {
+  text-transform: uppercase !important;
+}
+
+.mayus_input[matInput] {
+  text-transform: uppercase !important;
+}

@@ -1,0 +1,10 @@
+.col-angosta-accion {
+  width: 90px;
+  max-width: 100px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

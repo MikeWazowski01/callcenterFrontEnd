@@ -1,0 +1,17 @@
+.perfilCard {
+  padding-top: 30px;
+  display: flex; /* Esto hace la magia de ponerlos alineados en fila */
+  justify-content: center;
+  gap: 15px;
+}
+
+.card-perfil {
+  width: 30%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.card-dataPerfil {
+  padding: 10px;
+  width: 30%;
+}

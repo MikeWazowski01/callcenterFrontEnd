@@ -1,0 +1,82 @@
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div style="margin: 40px 15px">
+  <form [formGroup]="reporteForms" (ngSubmit)="generarReporte()">
+    <div class="form-row">
+      <mat-form-field appearance="outline" style="width: 47% !important">
+        <mat-label>Fecha Inicio</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="DD/MM/YYYY"
+          formControlName="FechaInicio"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 47% !important">
+        <mat-label>Fecha Fin</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerFin"
+          placeholder="DD/MM/YYYY"
+          formControlName="FechaFin"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerFin"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline" style="width: 47% !important">
+        <mat-label>Estatus</mat-label>
+        <mat-select formControlName="Estatus">
+          @for (estatus of Estatus; track estatus.IdEstatus) {
+            <mat-option [value]="estatus.IdEstatus">{{
+              estatus.Codigo
+            }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width: 47% !important">
+        <mat-label>Prioridad</mat-label>
+        <mat-select formControlName="Prioridad">
+          @for (prioridad of Prioridades; track prioridad.IdPrioridad) {
+            <mat-option [value]="prioridad.IdPrioridad">{{
+              prioridad.Codigo
+            }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div
+      class="form-row"
+      style="display: flex; align-items: center; justify-content: center"
+    >
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        style="
+          border-radius: 0px;
+          background: #000580;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          border: 0px;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        <mat-icon class="u-color-white">insert_chart</mat-icon>
+        <span class="u-color-white" style="margin-left: 8px"
+          >Generar Reporte</span
+        >
+      </button>
+    </div>
+  </form>
+</div>

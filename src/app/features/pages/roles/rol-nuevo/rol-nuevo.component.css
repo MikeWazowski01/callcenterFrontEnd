@@ -1,0 +1,35 @@
+ul {
+  list-style: none;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.menu-checkbox {
+  font-weight: 500;
+}
+
+.submenu-list {
+  margin-left: 24px;
+  margin-top: 8px;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu-list li {
+  margin: 4px 0;
+}
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dialog-content {
+  flex: 1;
+  overflow: auto;
+  padding-top: 15px;
+}

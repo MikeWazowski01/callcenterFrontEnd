@@ -1,0 +1,249 @@
+.card-title-listado {
+  margin-left: 0px !important;
+  margin-top: -10px;
+}
+
+.form-field {
+  flex: 1 1 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+}
+
+@media (min-width: 600px) {
+  .form-field {
+    flex: 1 1 calc(50% - 10.66px); /* 2 columnas desde 600px */
+  }
+}
+
+@media (min-width: 960px) {
+  .form-field {
+    flex: 1 1 calc(33.33% - 10.66px); /* 3 columnas desde 960px */
+  }
+}
+/*
+
+.filtros-row {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los inputs salten a la siguiente fila */
+/*gap: 5px 8px; /* gap vertical de 8px y horizontal de 16px */
+/*align-items: flex-end; /* Alinea los campos y botón por abajo */
+/*  padding: 20px 10px;
+}
+*/
+
+.table-header {
+  background: #000580 !important;
+  color: #ffffff !important;
+  /* text-align: center;
+  justify-content: center!important;  */
+}
+
+.table-center {
+  text-align: center;
+  justify-content: center !important;
+}
+/*
+.mat-header-cell{
+   width: 150px; 
+  min-width: 150px;
+  max-width: 150px;
+  margin-left: -40px;
+}
+.columna-table-accion{
+  width: 100px; 
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.columna-table-general{
+  width: 154px; 
+  min-width: 154px;
+  max-width: 154px;
+  text-align: center;
+}
+.mat-cell-accion{
+  padding-left: 10px!important;
+    width: 100px;        
+  min-width: 100px;
+  max-width: 100px;
+  overflow: hidden;     
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mat-cell{
+  margin-left: 0px!important;
+}
+
+.mat-cell-200{
+margin-left: -30px!important;
+    width: 200px;         
+  min-width: 200px;
+  max-width: 200px;
+ white-space: normal;    
+  word-wrap: break-word;  
+  word-break: break-word; 
+}
+
+.mat-cell-general{
+  padding-left: -30px!important;
+}
+*/
+
+.col-ancha {
+  width: 250px;
+  max-width: 350px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.col-ancha-fecha {
+  width: 200px;
+  max-width: 200px;
+  white-space: normal;
+  word-break: break-word;
+}
+.col-ancha :hover {
+  background-color: red;
+}
+
+.col-angosta-accion {
+  width: 130px;
+  max-width: 130px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col-angosta-folio {
+  width: 95px;
+  max-width: 120px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col-angosta {
+  width: 95px;
+  max-width: 150px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-delete {
+  color: rgb(225, 64, 64);
+}
+
+::ng-deep .mat-sort-header-arrow svg {
+  fill: #ffffff !important;
+}
+
+.hoverable-row:hover {
+  background-color: #e8e7eb !important; /* Light gray on hover */
+  cursor: pointer !important; /* Optional: shows pointer */
+  transition: background-color 0.3s !important;
+}
+
+::ng-deep .mat-mdc-paginator {
+  color: #000580 !important;
+}
+
+::ng-deep .cdk-overlay-pane.custom-dialog-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 96vh !important; /* Fuerza altura completa de la pantalla */
+  border-radius: 0px !important;
+}
+
+::ng-deep .custom-dialog-container .mat-dialog-container {
+  margin: 0 !important;
+  max-height: 95vh; /* Para que no se desborde en pantallas pequeñas */
+  overflow: auto; /* Scroll si el contenido es muy largo */
+  border-radius: 0 !important;
+}
+
+::ng-deep .custom-dialog-containerAudio .mat-dialog-container {
+  margin: 0 !important;
+  max-height: 95vh; /* Para que no se desborde en pantallas pequeñas */
+  overflow: auto; /* Scroll si el contenido es muy largo */
+  border-radius: 0 !important;
+}
+
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8); /* opcional: fondo translúcido */
+  z-index: 9999;
+}
+
+::ng-deep
+  .mat-mdc-progress-spinner
+  .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #000580 !important;
+}
+
+::ng-deep div.mat-mdc-select-panel {
+  background-color: #faf9fd !important;
+}
+
+::ng-deep
+  .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(
+    .mat-mdc-option-multiple
+  ) {
+  background-color: #000580 !important;
+}
+
+::ng-deep
+  .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(
+    .mat-mdc-option-multiple
+  )
+  .mdc-list-item__primary-text {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-option .mat-pseudo-checkbox {
+  --mat-minimal-pseudo-checkbox-selected-checkmark-color: white !important;
+}
+::ng-deep .mat-mdc-option {
+  color: white !important;
+}
+
+.scroll-container {
+  max-height: 400px;
+  overflow: auto;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.demo-data * {
+  margin: 16px 0;
+}
+
+.inactive-row {
+  background-color: #ff7d7d; /*#d5a40e; /* rojo claro */
+}
+
+.retrasado-row {
+  background-color: #ffcccc; /* rojo claro */
+  color: #a56363; /* texto rojo oscuro */
+}
+
+.finalizado-row {
+  background-color: #81b983; /* #80e0b3; /* verde claro */
+  /* color: #006600; texto verde oscuro */
+}

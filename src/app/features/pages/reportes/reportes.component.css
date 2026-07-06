@@ -1,0 +1,94 @@
+/* ... Conservas tus estilos anteriores de .dashboard-container y .kpi-card ... */
+
+.dashboard-container {
+  padding: 24px;
+  background-color: #f8f9fa;
+}
+
+.dashboard-title {
+  color: #001ba1;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  width: 85%;
+  height: 90%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+mat-card-subtitle {
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b !important;
+  text-transform: uppercase;
+  margin-top: 12px;
+  margin-left: 12px;
+}
+
+/* Centrado Absoluto usando Flexbox */
+.kpi-icon-container {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
+  flex-grow: 1; /* Hace que tome todo el espacio intermedio del card */
+  padding: 0 !important;
+}
+
+/* Reglas indispensables para hacer el mat-icon gigante */
+.large-kpi-icon {
+  font-size: 48px !important; /* Tamaño visual del icono */
+  width: 48px !important; /* Ancho del contenedor del icono */
+  height: 48px !important; /* Alto del contenedor del icono */
+  line-height: 48px !important;
+}
+
+/* --- Colores específicos de los iconos según su tarjeta --- */
+
+.corporate-card {
+  border-top: 4px solid #001ba1;
+}
+.corporate-card .large-kpi-icon {
+  color: #001ba1; /* Tu azul en el icono */
+}
+
+.alert-card {
+  border-top: 4px solid #ef4444;
+}
+.alert-card .large-kpi-icon {
+  color: #ef4444; /* Rojo para alertas */
+}
+
+.success-card {
+  border-top: 4px solid #10b981;
+}
+.success-card .large-kpi-icon {
+  color: #10b981; /* Verde */
+}
+
+.standard-card {
+  border-top: 4px solid #64748b;
+}
+.standard-card .large-kpi-icon {
+  color: #64748b; /* Gris */
+}
+
+/* Footer del Card */
+.kpi-footer {
+  font-size: 11px;
+  color: #64748b;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  border-radius: 0 0 8px 8px;
+  text-align: center; /* Centramos también el texto descriptivo */
+}

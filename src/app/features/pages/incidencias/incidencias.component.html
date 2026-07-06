@@ -1,0 +1,322 @@
+<div style="padding-top: 20px">
+  @if (isLoading) {
+    <div
+      [ngClass]="{
+        'spinner-overlay': !isLoadigbuscarLimpiar,
+        'spinner-overlay-true': isLoadigbuscarLimpiar,
+      }"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+
+  <mat-accordion>
+    <mat-expansion-panel
+      (opened)="panelOpenState.set(true)"
+      (closed)="panelOpenState.set(false)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title class="u-font-size-title">
+          <mat-icon class="color-general icon_filtro">filter_alt</mat-icon>
+          <span class="color-general">Filtro</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div style="height: 10px"></div>
+      <div class="form-container">
+        <form [formGroup]="filtroForm" (ngSubmit)="buscarFiltro()">
+          <div class="form-row">
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 70% !important"
+            >
+              <mat-label>Nombre</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                placeholder="Nombre Apellido(s)"
+                formControlName="nombre"
+              />
+            </mat-form-field>
+            <div style="width: 30% !important"></div>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Inicio</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                [matDatepicker]="picker"
+                placeholder="DD/MM/YYYY"
+                formControlName="fechaInicio"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Prioridad</mat-label>
+              <mat-select formControlName="prioridad">
+                @for (prioridad of Prioridades; track prioridad.IdPrioridad) {
+                  <mat-option [value]="prioridad.IdPrioridad">{{
+                    prioridad.Codigo
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Estatus</mat-label>
+              <mat-select formControlName="estatus">
+                @for (estatus of Estatus; track estatus.IdEstatus) {
+                  <mat-option [value]="estatus.IdEstatus">{{
+                    estatus.Codigo
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              padding: 10px 30px 0px 30px;
+            "
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              style="border-radius: 0px; background: #000580; width: 130px"
+              type="submit"
+            >
+              <mat-icon>search</mat-icon
+              ><span class="u-color-white">Buscar</span>
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              style="border-radius: 0px; background: #000580; width: 130px"
+              type="button"
+              (click)="limpiarFormualrio()"
+            >
+              <mat-icon>cleaning_services</mat-icon
+              ><span class="u-color-white">Limpiar</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<div style="height: 10px"></div>
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <button
+        *appHasPermission="'Incidencia:crear'"
+        class="btn_add_lista pointer"
+        (click)="nuevaIncidencia()"
+        title="Nueva Incidencia"
+      >
+        <mat-icon class="color-general icon_add_lista">add_box</mat-icon>
+      </button>
+    </div>
+
+    <mat-card-title class="card-title-listado">
+      <h1 class="color-general u-font-size-title">Lista de Incidencias</h1>
+    </mat-card-title>
+    <mat-divider></mat-divider>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-divider></mat-divider>
+    <div class="scroll-container">
+      <mat-table [dataSource]="dataSource" matSort>
+        <!--Acciones-->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell
+            class="col-angosta-accion table-header"
+            *matHeaderCellDef
+            >Acciones</mat-header-cell
+          >
+          <mat-cell class="col-angosta-accion" *matCellDef="let element">
+            <button
+              *appHasPermission="'Incidencia:editar'"
+              title="Ver Datos Incidecia"
+              mat-icon-button
+              (click)="datosIncidencias(element)"
+              mat-icon-button
+            >
+              <mat-icon class="color-general">folder_eye</mat-icon>
+            </button>
+
+            <button
+              *appHasPermission="'Incidencia:ver'"
+              title="Ver Detalles"
+              mat-icon-button
+              (click)="verDetalles(element)"
+            >
+              <mat-icon class="color-general">visibility</mat-icon>
+            </button>
+
+            @if (canDelete) {
+              <button
+                title="Eliminar"
+                mat-icon-button
+                (click)="eliminarIncidencia(element)"
+              >
+                <mat-icon class="color-delete">delete</mat-icon>
+              </button>
+            }
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="folio">
+          <mat-header-cell
+            class="col-angosta-folio table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Folio
+          </mat-header-cell>
+          <mat-cell class="col-angosta-folio" *matCellDef="let element">
+            {{ element.Folio }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="persona">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Persona
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.Persona }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fechaInicio">
+          <mat-header-cell
+            class="col-ancha-fecha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Fecha Inicio
+          </mat-header-cell>
+          <mat-cell class="col-ancha-fecha" *matCellDef="let element">
+            {{ element.FechaInicio }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fechaFin">
+          <mat-header-cell
+            class="col-ancha-fecha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Fecha Fin
+          </mat-header-cell>
+          <mat-cell class="col-ancha-fecha" *matCellDef="let element">
+            {{ element.FechaFin }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="da">
+          <mat-header-cell
+            class="col-angosta table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            DA
+          </mat-header-cell>
+          <mat-cell
+            class="col-angosta table-center"
+            style="margin-left: -5px"
+            *matCellDef="let element"
+          >
+            {{ element.Da }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="responsable">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Responsable
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.NombreResponsable }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="categoria">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Categoria
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.Categoria }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="prioridad">
+          <mat-header-cell
+            class="col-angosta table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Prioridad
+          </mat-header-cell>
+          <mat-cell class="col-angosta" *matCellDef="let element">
+            <mat-icon [style.color]="element.Prioridad"
+              >circle</mat-icon
+            ></mat-cell
+          >
+        </ng-container>
+        <ng-container matColumnDef="estatus">
+          <mat-header-cell
+            class="col-angosta table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Estatus
+          </mat-header-cell>
+          <mat-cell class="col-angosta" *matCellDef="let element">
+            {{ element.Estatus }}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="hoverable-row"
+          [ngClass]="{
+            'inactive-row': row.Da > 3 && row.Estatus !== 'FINALIZADO',
+            'finalizado-row': row.Estatus === 'FINALIZADO',
+          }"
+        >
+        </mat-row>
+      </mat-table>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <mat-paginator
+      #paginator
+      class="demo-paginator"
+      (page)="handlePageEvent($event)"
+      [length]="length"
+      [pageSize]="pageSize"
+      [disabled]="disabled"
+      [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+      [hidePageSize]="hidePageSize"
+      [pageIndex]="pageIndex"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </mat-card-actions>
+</mat-card>

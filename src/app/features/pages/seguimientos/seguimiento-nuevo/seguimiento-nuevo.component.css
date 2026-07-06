@@ -1,0 +1,132 @@
+.mat-mdc-tab-group {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  color: #000580;
+  border: 2px solid;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.icon_add_lista_tab {
+  font-size: 36px;
+  height: 35px;
+  width: 35px;
+}
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: white !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-tab:not(.mdc-tab--active) .mdc-tab__text-label {
+  color: #000580 !important;
+}
+
+::ng-deep .mat-mdc-tab:not(.mdc-tab--active):hover .mdc-tab__text-label {
+  color: #6a82fb !important;
+}
+::ng-deep .mat-mdc-tab:hover .mdc-tab__text-label {
+  color: white !important;
+}
+
+::ng-deep
+  .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs
+  > .mat-mdc-tab-header
+  .mat-mdc-tab {
+  flex-grow: 1;
+  background: white; /* Fondo de tabs inactivos */
+  color: #000580 !important; /* Texto blanco para todos */
+  transition: background 0.3s; /* Transición suave */
+}
+
+/* Tab ACTIVO: más claro o diferente color */
+::ng-deep
+  .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs
+  > .mat-mdc-tab-header
+  .mat-mdc-tab.mdc-tab--active {
+  background: #000580; /* Color más vivo para el tab activo */
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  display: block;
+  flex-grow: 1;
+  box-sizing: border-box;
+  margin: 0;
+  overflow: auto;
+  max-height: 90vh !important;
+}
+
+section {
+  display: flex;
+  align-items: center;
+}
+
+.example-label {
+  font-size: 14px;
+  margin: 0 16px 0 20px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+::ng-deep .cdk-overlay-pane.custom-dialog {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 60vh !important; /* Fuerza altura completa de la pantalla */
+  border-radius: 0px !important;
+}
+
+.col-angosta-accion {
+  width: 130px;
+  max-width: 130px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col-grande {
+  width: 150px;
+  max-width: 200px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col-angosta {
+  width: 95px;
+  max-width: 150px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

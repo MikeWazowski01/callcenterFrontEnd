@@ -1,0 +1,278 @@
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div style="padding: 20px 10px">
+  @if (isLoading) {
+    <div
+      [ngClass]="{
+        'spinner-overlay-buscar': !isLoadigbuscarLimpiar,
+        'spinner-overlay-true': isLoadigbuscarLimpiar,
+      }"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+  <mat-accordion>
+    <mat-expansion-panel
+      (opened)="panelOpenState.set(true)"
+      (closed)="panelOpenState.set(false)"
+      [expanded]="true"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title class="u-font-size-title">
+          <mat-icon class="color-general icon_filtro">filter_alt</mat-icon>
+          <span class="color-general">Filtro</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div style="height: 10px"></div>
+      <div class="form-container">
+        <form [formGroup]="filtroForm" (ngSubmit)="buscar()">
+          <div class="form-row">
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 30% !important"
+            >
+              <mat-label>Nombre(s)</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                placeholder="Nombre(s)"
+                formControlName="GFCLINO1"
+              />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 30% !important"
+            >
+              <mat-label>Apellido Paterno</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                placeholder="apellidoPaterno"
+                formControlName="GFCLIAP1"
+              />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 30% !important"
+            >
+              <mat-label>Apellido Materno</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                placeholder="apellidoMaterno"
+                formControlName="GFCLIAP2"
+              />
+            </mat-form-field>
+          </div>
+          <div class="form-row">
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 30% !important"
+            >
+              <mat-label>Curp</mat-label>
+              <input
+                class="mayus_input"
+                matInput
+                placeholder="Nombre"
+                formControlName="GFCLICUR"
+              />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="form-field"
+              style="width: 30% !important"
+            >
+              <mat-label>Oficina</mat-label>
+              <mat-select formControlName="Oficina" formControlName="GFCLICAG">
+                @for (oficina of CataOficinas; track oficina.PAAGECOD) {
+                  <mat-option [value]="oficina.PAAGECOD">{{
+                    oficina.PAAGENOM
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div style="padding-top: 15px; padding-left: 20px">
+              <button
+                mat-raised-button
+                color="primary"
+                class="pointer"
+                style="
+                  border-radius: 0px;
+                  background: #000580;
+                  width: 150px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  height: 3em;
+                  border: 0px;
+                "
+                type="submit"
+                (click)="buscar()"
+              >
+                <mat-icon class="u-color-white">search</mat-icon
+                ><span class="u-color-white">Buscar</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div style="height: 5px"></div>
+<mat-card style="margin: 10px" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="color-general u-font-size-title">
+        <mat-icon>group</mat-icon>Clientes
+      </h1>
+    </mat-card-title>
+    <mat-divider></mat-divider>
+  </mat-card-header>
+  <div
+    style="width: auto; height: 350px; overflow: auto; border: 1px solid #ccc"
+  >
+    <mat-card-content>
+      <mat-divider></mat-divider>
+
+      <mat-table [dataSource]="dataSource" matSort>
+        <!--Acciones-->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell
+            class="col-angosta-accion table-header"
+            *matHeaderCellDef
+            >Acciones</mat-header-cell
+          >
+          <mat-cell class="col-angosta-accion" *matCellDef="let element">
+            <button
+              title="Seleccionar"
+              mat-icon-button
+              style="background: transparent; border: 0px"
+              (click)="seleccionarCliente(element)"
+            >
+              <mat-icon class="color-general">check</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="noCliente">
+          <mat-header-cell
+            class="col-angosta table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            No.Cliente
+          </mat-header-cell>
+          <mat-cell class="col-angosta" *matCellDef="let element">
+            {{ element.GFCLINUM }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="cliente">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Cliente
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.GFCLINOM }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="grupo">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Grupo
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.GRUPO }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="surcursal">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Surcursal
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.SUCURSALGRUP }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="curp">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Curp
+          </mat-header-cell>
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.GFCLICUR }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fechaNacimiento">
+          <mat-header-cell
+            class="table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Fecha Nacimiento
+          </mat-header-cell>
+          <mat-cell
+            class="table-center"
+            style="margin-left: -5px"
+            *matCellDef="let element"
+          >
+            {{ element.GFCLIFNA | date: "dd/mm/yyyy" }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ine">
+          <mat-header-cell
+            class="col-ancha table-header"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            ine</mat-header-cell
+          >
+          <mat-cell class="col-ancha" *matCellDef="let element">
+            {{ element.GFCLIINE }}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="hoverable-row"
+        >
+        </mat-row>
+      </mat-table>
+    </mat-card-content>
+    <mat-card-actions>
+      <mat-paginator
+        #paginator
+        class="demo-paginator"
+        (page)="handlePageEvent($event)"
+        [length]="length"
+        [pageSize]="pageSize"
+        [disabled]="disabled"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+        [hidePageSize]="hidePageSize"
+        [pageIndex]="pageIndex"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </mat-card-actions>
+  </div>
+</mat-card>

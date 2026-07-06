@@ -1,0 +1,132 @@
+<div class="dialog-container">
+  <app-toolbar (click)="closeDialog()" [titulo]="titulo"></app-toolbar>
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 15px;
+      margin-right: 20px;
+      padding-bottom: 0px;
+    "
+  >
+    <button
+      mat-icon-button
+      class="background-transparente pointer"
+      title="Guardar Información"
+    >
+      @if (!isLoadingSave) {
+        <mat-icon class="u-color-white">save</mat-icon>
+      } @else {
+        <mat-spinner
+          class="white-spinner"
+          mode="indeterminate"
+          diameter="30"
+          strokeWidth="3"
+        >
+        </mat-spinner>
+      }
+    </button>
+  </div>
+  <div class="dialog-content">
+    <div style="padding-top: 15px">
+      <form (ngSubmit)="guardarRol()">
+        <div class="form-row">
+          <mat-form-field
+            appearance="outline"
+            class="form-field"
+            style="width: 100% !important"
+          >
+            <mat-label>Nombre Rol</mat-label>
+            <input
+              matInput
+              placeholder="Nombre del rol"
+              name="rol"
+              [(ngModel)]="rol"
+              style="resize: none !important"
+            />
+          </mat-form-field>
+        </div>
+        <div style="padding-left: 20px">
+          @for (menu of Menus; track menu.IdMenu) {
+            <section class="example-section">
+              <span class="example-list-section">
+                <mat-checkbox
+                  class="example-margin"
+                  [checked]="task().completed"
+                  [indeterminate]="partiallyComplete()"
+                  (change)="update($event.checked)"
+                >
+                  {{ menu.NombreMenu }}
+                </mat-checkbox>
+              </span>
+              <span class="example-list-section">
+                <ul>
+                  @for (
+                    submenu of menu.SubMenus;
+                    track submenu.IdMenu;
+                    let i = $index
+                  ) {
+                    <li>
+                      <mat-checkbox
+                        [checked]="false"
+                        (change)="update($event.checked, i)"
+                      >
+                        {{ submenu.NombreMenu }}
+                      </mat-checkbox>
+                    </li>
+                  }
+                </ul>
+              </span>
+            </section>
+          }
+
+          @for (menu of Menus; track menu.IdMenu) {
+            <span class="example-list-section">
+              <mat-checkbox class="example-margin">
+                <span class="color-general"> {{ menu.NombreMenu }}</span>
+              </mat-checkbox>
+            </span>
+            <br />
+            @if (menu.SubMenus.length > 0) {
+              <span class="example-list-section">
+                <ul>
+                  @for (submenu of menu.SubMenus; track submenu.IdMenu) {
+                    <li>
+                      <mat-checkbox>
+                        <span class="color-generalSubMenu">{{
+                          submenu.NombreMenu
+                        }}</span>
+                      </mat-checkbox>
+                    </li>
+                    <li style="margin-left: 30px">
+                      <mat-checkbox>
+                        <span class="color-generalOpciones">Ver</span>
+                      </mat-checkbox>
+                      <mat-checkbox>
+                        <span class="color-generalOpciones">Crear</span>
+                      </mat-checkbox>
+                      <mat-checkbox
+                        ><span class="color-generalOpciones">Editar</span>
+                      </mat-checkbox>
+                      <mat-checkbox>
+                        <span class="color-generalOpciones">Eliminar</span>
+                      </mat-checkbox>
+                      <mat-checkbox>
+                        <span class="color-generalOpciones">Detalles</span>
+                      </mat-checkbox>
+                      <mat-checkbox>
+                        <span class="color-generalOpciones">BuscarCliente</span>
+                      </mat-checkbox>
+                    </li>
+                  }
+                </ul>
+              </span>
+            }
+          }
+        </div>
+
+        <div class="form-row" style="padding-top: 20px"></div>
+      </form>
+    </div>
+  </div>
+</div>

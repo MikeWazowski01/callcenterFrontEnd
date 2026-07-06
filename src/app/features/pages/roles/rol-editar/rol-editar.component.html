@@ -1,0 +1,82 @@
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div
+  style="
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-top: 10px;
+  "
+>
+  <button
+    matIconButton
+    class="background-transparente pointer"
+    title="Guardar Información"
+    (click)="editarRole()"
+  >
+    @if (!isLoadingSave) {
+      <mat-icon class="u-color-white">save</mat-icon>
+    } @else {
+      <mat-spinner
+        class="white-spinner"
+        mode="indeterminate"
+        diameter="30"
+        strokeWidth="3"
+      >
+      </mat-spinner>
+    }
+  </button>
+</div>
+<div style="padding-top: 20px">
+  <form [formGroup]="filtroForm" (ngSubmit)="guardarRol()">
+    <div class="form-row">
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        style="width: 100% !important"
+      >
+        <mat-label>Nombre Rol</mat-label>
+        <input matInput placeholder="Rol" formControlName="NombreRol" />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" style="width: 100% !important">
+        <mat-label>Fecha Registro</mat-label>
+        <input
+          readonly="true"
+          matInput
+          [matDatepicker]="picker"
+          placeholder="DD/MM/YYYY"
+          formControlName="FechaRegistro"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker"
+          disabled="true"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline" style="width: 100% !important">
+        <mat-label>Estatus</mat-label>
+        <mat-select formControlName="Estatus">
+          <mat-option [value]="1">ACTIVO</mat-option>
+          <mat-option [value]="0">INACTIVO</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!--
+    <div class="form-row">
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="buttonSave pointer"
+      >
+        <mat-icon class="u-color-white iconButton">save</mat-icon
+        ><span class="u-color-white spanButton">Guardar</span>
+      </button>
+    </div>-->
+  </form>
+</div>

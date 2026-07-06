@@ -1,0 +1,41 @@
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 350px;
+    padding: 2rem;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.logo-card {
+    padding-bottom: 20px;
+}
+
+.mat-mdc-raised-button:not(:disabled) {
+    color: var(--mdc-protected-button-label-text-color, #ffffff);
+    background-color: #000580;
+}
+
+login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+
+}
+
+
+::ng-deep .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+    stroke: #ffffff!important;
+}

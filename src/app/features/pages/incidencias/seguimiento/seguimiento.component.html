@@ -1,0 +1,62 @@
+<app-toolbar (click)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div style="padding-top: 20px">
+  <form [formGroup]="seguimientoForm" (ngSubmit)="guardar()">
+    <div class="form-row">
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        style="width: 45% !important"
+      >
+        <mat-label>Fecha Creación</mat-label>
+        <input
+          matInput
+          placeholder="Fecha Creación"
+          formControlName="FechaCreacion"
+          [readonly]="readOnly"
+        />
+      </mat-form-field>
+      <section class="example-section">
+        <mat-checkbox formControlName="pepperoni">Reenvio</mat-checkbox>
+      </section>
+      <mat-form-field
+        appearance="outline"
+        style="width: 100% !important; height: 200px !important"
+      >
+        <mat-label>Seguimiento</mat-label>
+        <textarea
+          matInput
+          class="mayus_textarea"
+          placeholder="Seguimiento"
+          formControlName="Descripcion"
+          style="resize: none !important"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <div
+        style="
+          padding-top: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        "
+      >
+        <button
+          mat-raised-button
+          color="primary"
+          style="
+            border-radius: 0px;
+            background: #000580;
+            width: 150px;
+            margin-top: -10px;
+          "
+          type="submit"
+        >
+          <mat-icon>save</mat-icon><span class="u-color-white">Guardar</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

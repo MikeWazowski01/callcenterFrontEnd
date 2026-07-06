@@ -1,0 +1,66 @@
+<div class="dashboard-container">
+  <h2 class="dashboard-title">Reportes de Control Operativo</h2>
+
+  <mat-grid-list cols="4" rowHeight="180px" gutterSize="20px">
+    <!-- Card 1: Alerta Crítica con Icono Grande -->
+    <mat-grid-tile>
+      <mat-card
+        *appHasPermission="'Incidencia:guardarCrear'"
+        class="kpi-card alert-card mat-button"
+        (click)="reportes(1)"
+      >
+        <mat-card-header>
+          <mat-card-subtitle
+            >Reporte de Tickets por Estado y Prioridad</mat-card-subtitle
+          >
+        </mat-card-header>
+
+        <!-- Contenedor centrado para el icono -->
+        <mat-card-content class="kpi-icon-container">
+          <mat-icon class="large-kpi-icon">assignment</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Card 2: Total Pendientes (Tu Azul Corporativo) -->
+    <!-- <mat-grid-tile>
+      <mat-card class="kpi-card corporate-card">
+        <mat-card-header>
+          <mat-card-subtitle
+            >Alertas de Envejecimiento de Tickets</mat-card-subtitle
+          >
+        </mat-card-header>
+
+        <mat-card-content class="kpi-icon-container">
+          <mat-icon class="large-kpi-icon">more_time</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>-->
+
+    <!-- Card 3: Resueltos Exitosamente -->
+    <!-- <mat-grid-tile>
+      <mat-card class="kpi-card success-card">
+        <mat-card-header>
+          <mat-card-subtitle>Reporte Incidencias Finalizadas</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="kpi-icon-container">
+          <mat-icon class="large-kpi-icon">check_circle</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Card 4: Tiempos de SLA -->
+    <!-- <mat-grid-tile>
+      <mat-card class="kpi-card standard-card">
+        <mat-card-header>
+          <mat-card-subtitle>Tiempo Promedio</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="kpi-icon-container">
+          <mat-icon class="large-kpi-icon">hourglass_empty</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>-->
+  </mat-grid-list>
+</div>

@@ -1,0 +1,67 @@
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div style="padding-top: 20px">
+  <form [formGroup]="RolesForm" (ngSubmit)="guardar()">
+    <div class="form-row">
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        style="width: 100% !important"
+      >
+        <mat-label>Login</mat-label>
+        <input
+          matInput
+          placeholder="Login"
+          style="resize: none !important"
+          formControlName="Login"
+        />
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        style="width: 100% !important"
+      >
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          placeholder="Email"
+          style="resize: none !important"
+          formControlName="Email"
+        />
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        style="width: 100% !important"
+      >
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          placeholder="Nombre"
+          style="resize: none !important"
+          formControlName="Nombre"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width: 100% !important">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="Rol">
+          @for (roles of RolesUsuarios; track roles.IdRol) {
+            <mat-option [value]="roles.IdRol">{{ roles.NombreRol }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="buttonSave pointer"
+      >
+        <mat-icon class="u-color-white iconButton">save</mat-icon
+        ><span class="u-color-white spanButton">Guardar</span>
+      </button>
+    </div>
+  </form>
+</div>

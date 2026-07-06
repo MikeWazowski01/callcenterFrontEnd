@@ -1,0 +1,124 @@
+
+/*--------------------------------------------------mat-sidenav-container--------------------------------------------------*/
+
+.app__container {
+  height: 100vh;
+ /* background: #000F90;*/
+}
+
+/*Barra Lateral Para mostrar la barra pequeña solo muestra iconos*/
+.sidenav {
+  width: 40px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  border-radius: 0px;
+  background: #000580;
+  padding-top: 40px;
+}
+
+/*Barra Lateral Para mostrar la barra extendida muestra descripcion del los menus*/
+.sidenav.sidenav--expanded {
+  width: 15%;
+}
+
+.sidebar__icon {
+  font-size: 25px !important;
+  color: white;
+  margin-left: 6px;
+  margin-bottom: 5px;
+  vertical-align: middle !important;
+}
+
+.sidebar__icon_menu{
+   font-size: 25px !important;
+  color: white;
+  margin-left: -5px;
+  margin-bottom: 5px;
+  vertical-align: middle !important;
+}
+
+.sidebar__icon_sub{
+   font-size: 25px !important;
+  color: white;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  vertical-align: middle !important;
+}
+.sidebar__subitem-icon {
+  margin-top: 0px;
+}
+
+.sidebar__subitem-name {
+  margin-left: 6px;
+}
+
+/*altura de los items para menus*/
+.sidebar__item,
+.sidebar__panel-title {
+  height: 50px!important;
+  padding: 0 8px !important;
+  border-radius: 0px !important;
+}
+
+.sidebar__subitem {
+  border-radius: 0px !important;
+  padding-top: 0px !important;
+  height: var(--mdc-list-list-item-one-line-container-height, 50px)!important;
+}
+
+/*mostrar solo iconos*/
+.sidebar__item-icon-only {
+  border-radius: 0px !important;
+  padding: 0px;
+  height: 48px!important;
+  margin-bottom: -10px !important;
+  margin-top: 0px;
+}
+
+.sidebar__subitem:hover {
+  background: #04107b;
+}
+
+.sidebar__item:hover {
+  background: #04107b !important;
+}
+
+/*Expandir menus*/
+.sidebar__panel-header {
+  margin-left: -24px;
+}
+
+/*Para el submenu*/
+.sidebar__expansion-panel {
+  background: transparent !important;
+  box-shadow: unset !important;
+}
+
+/* Contenedor que alinea ícono y texto */
+/* Centra verticalmente ícono y texto */
+/* Espacio entre ícono y texto */
+.sidebar__icon-text-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Texto */
+.sidebar__menu-label {
+  margin-top: -4px;
+  margin-left: 3px!important;
+}
+
+.sidebar__menu-label-sub {
+  white-space: nowrap;
+  margin-top: -10px !important;
+  padding-top: -40px;
+
+}
+
+.sidebar__menu-sub {
+  white-space: nowrap;
+  margin-left: -5px;
+}
+
+/*--------------------------------------------------Fin mat-sidenav-container--------------------------------------------------*/
+

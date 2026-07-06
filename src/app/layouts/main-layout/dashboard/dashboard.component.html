@@ -1,0 +1,136 @@
+<mat-toolbar class="toolbar">
+  <img
+    src="{{ logo }}"
+    class="toolbar__img"
+    [ngClass]="{
+      'toolbar__img--big': isHovered,
+      'toolbar__img--small': !isHovered,
+    }"
+    alt="Conserva"
+  />
+
+  <span class="u-color-white toolbar__title titulo_principal">Call Center</span>
+  <span class="u-spacer"></span>
+  <div class="toolbar__user-name">{{ usuario }}</div>
+
+  <button mat-button [matMenuTriggerFor]="userMenu">
+    <img class="toolbar__user-avatar" [src]="urlAvatar" alt="usuario" />
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon class="u-color-white sidebar__icon_menu" style="margin-top: 8px"
+        >logout
+      </mat-icon>
+      <span class="u-color-white u-font-size mat__menu-name"
+        >Cerrar sesión</span
+      >
+    </button>
+    <button mat-menu-item routerLink="configuracion">
+      <mat-icon
+        class="u-color-white sidebar__icon_menu"
+        style="margin-top: 8px"
+      >
+        settings</mat-icon
+      >
+      <span class="u-color-white u-font-size mat__menu-name"
+        >Configuración</span
+      >
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container class="app__container">
+  <!-- Barra lateral -->
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    class="sidenav"
+    [class.sidenav--expanded]="isHovered"
+    (mouseenter)="expandedMenu(true)"
+    (mouseleave)="expandedMenu(false)"
+  >
+    <mat-nav-list>
+      <div style="height: 20px"></div>
+
+      @for (menu of MENUS; track menu) {
+        <ng-container>
+          @if (
+            menu.SubMenus.length === 0 ||
+            (!isHovered && menu.SubMenus.length > 0)
+          ) {
+            <ng-container>
+              <mat-list-item
+                [routerLink]="menu.Ruta"
+                [ngClass]="{
+                  sidebar__item: isHovered,
+                  'sidebar__item-icon-only': !isHovered,
+                }"
+              >
+                <div class="sidebar__icon-text-container">
+                  <mat-icon mat-list-icon class="sidebar__icon">{{
+                    menu.Icon
+                  }}</mat-icon>
+                  @if (isHovered) {
+                    <span
+                      class="sidebar__menu-label u-font-size sidebar__menu-sub u-color-white"
+                    >
+                      {{ menu.NombreMenu }}
+                    </span>
+                  }
+                </div>
+              </mat-list-item>
+            </ng-container>
+          }
+          <mat-divider></mat-divider>
+          @if (menu.SubMenus.length > 0 && isHovered) {
+            <ng-container>
+              <mat-expansion-panel class="sidebar__expansion-panel">
+                <mat-expansion-panel-header class="sidebar__panel-header">
+                  <mat-panel-title class="sidebar__panel-title">
+                    <mat-icon mat-list-icon class="sidebar__icon_sub">{{
+                      menu.Icon
+                    }}</mat-icon>
+                    @if (isHovered) {
+                      <span
+                        class="sidebar__menu-label u-font-size sidebar__menu-sub u-color-white"
+                        >{{ menu.NombreMenu }}</span
+                      >
+                    }
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-nav-list>
+                  @for (sub of menu.SubMenus; track sub) {
+                    <mat-list-item
+                      class="sidebar__subitem"
+                      [routerLink]="sub.Ruta"
+                    >
+                      <mat-icon class="sidebar__icon sidebar__subitem-icon">{{
+                        sub.Icon
+                      }}</mat-icon>
+                      @if (isHovered) {
+                        <span
+                          class="u-color-white sidebar__subitem-name u-font-size"
+                          >{{ sub.NombreMenu }}</span
+                        >
+                      }
+                    </mat-list-item>
+                  }
+                </mat-nav-list>
+              </mat-expansion-panel>
+            </ng-container>
+            <mat-divider></mat-divider>
+          }
+        </ng-container>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Contenido -->
+  <mat-sidenav-content class="content">
+    <div class="content__main" [class.content-expanded]="isHovered">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
