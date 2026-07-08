@@ -46,7 +46,7 @@ import { HasPermissionDirective } from '../../../../shared/directives/has-permis
 @Component({
   selector: 'app-incidencia-nueva',
   standalone: true,
-  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-MX' }, DatePipe, CurrencyPipe],
+  providers: [provideNativeDateAdapter(), DatePipe, CurrencyPipe],
   imports: [MatExpansionModule, MatDividerModule, MatTabsModule, MatToolbarModule, MatDialogModule, MatFormFieldModule, ReactiveFormsModule, MatDatepickerModule, MatSelectModule,
     MatIconModule, MatCardModule, MatInputModule, MatCheckboxModule, ToolbarComponent, CommonModule,
     MatTableModule, MatAutocompleteModule, MatNativeDateModule, MatProgressSpinnerModule, HasPermissionDirective],
@@ -73,7 +73,7 @@ export class IncidenciaNuevaComponent implements OnInit {
   incidenciaForm!: FormGroup;
   agentesForm!: FormGroup;
   isLoading: boolean = false;
-  readonlyHomologacion:boolean=false;
+  readonlyHomologacion: boolean = false;
   noCliente: string = '';
   Prioridades: IPrioridadResponse[] = [];
   TipoMotivoAtraso: ITipoMotivoAtrasoResponse[] = [];
@@ -96,7 +96,7 @@ export class IncidenciaNuevaComponent implements OnInit {
   TipoSeguimiento: ITipoSeguimientoResponse[] = [];
   FechaHora: IFechaHora[] = [];
   isCliente: boolean = false;
-  checkCliente:boolean =true;
+  checkCliente: boolean = true;
   fechaHora: boolean = true;
   puesto: string = '';
   email: string = '';
@@ -164,7 +164,7 @@ export class IncidenciaNuevaComponent implements OnInit {
         ApellidoPaterno: ['', Validators.required],
         ApellidoMaterno: ['', Validators.required],
         INE: ['', []],
-        FechaNacimiento: [null,Validators.required],
+        FechaNacimiento: [null, Validators.required],
         Telefono: ['', []],
         Curp: ['', []],
         Pais: ['MX', Validators.required],
@@ -203,7 +203,7 @@ export class IncidenciaNuevaComponent implements OnInit {
         Homologacion: [0],
         TipoMotivoAtraso: [0],
         MotivoAtraso: [''],
-        OtraLlamada: ['',[]]
+        OtraLlamada: ['', []]
       }),
       DatosAgenteAsignado: this.fb.array([]),
       DatosEvidencias: this.fb.array([]),
@@ -268,8 +268,8 @@ export class IncidenciaNuevaComponent implements OnInit {
   guardarIncidencia() {
 
 
-this.evaluarCamposCondicionales(this.isCliente);
-    
+    this.evaluarCamposCondicionales(this.isCliente);
+
 
     if (this.incidenciaForm.invalid) {
       this.openSnackBar("Datos Obligatorios Revise (*)");
@@ -287,18 +287,18 @@ this.evaluarCamposCondicionales(this.isCliente);
       return;
     }
 
-    if(this.otroTipoLlamada == false){
-if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.value?.IdLlamadaCategoria == 0) {
-      this.openSnackBar("Seccion Datos Incidencia: Agrege el Tipo de Llamada");
-      return;
+    if (this.otroTipoLlamada == false) {
+      if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.value?.IdLlamadaCategoria == 0) {
+        this.openSnackBar("Seccion Datos Incidencia: Agrege el Tipo de Llamada");
+        return;
+      }
+
+      if (this.CasoCtrl.value?.IdCasoCategoria == undefined || this.CasoCtrl.value?.IdCasoCategoria == 0) {
+        this.openSnackBar("Seccion Datos Incidencia: Agrege el Caso del tipo de Llamada");
+        return;
+      }
     }
 
-    if (this.CasoCtrl.value?.IdCasoCategoria == undefined || this.CasoCtrl.value?.IdCasoCategoria == 0) {
-      this.openSnackBar("Seccion Datos Incidencia: Agrege el Caso del tipo de Llamada");
-      return;
-    }
-    }
-    
 
     this.isLoadingSave = true;
     this.openSnackBar("Registrando incidencia espere por favor....... ");
@@ -385,31 +385,31 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
 
   evaluarCamposCondicionales(esCliente: boolean) {
 
-  const camposAValidar = ['DatosPersonales.INE', 'DatosPersonales.Telefono','DatosPersonales.Curp','DatosPersonales.Direccion'];
+    const camposAValidar = ['DatosPersonales.INE', 'DatosPersonales.Telefono', 'DatosPersonales.Curp', 'DatosPersonales.Direccion'];
 
-  
-  camposAValidar.forEach(nombreCampo => {
-    const campo = this.incidenciaForm.get(nombreCampo);
 
-    if (campo) {
-      if (esCliente) {
-        
-        campo.setValidators([Validators.required]);
-      } else {
-     
-        campo.clearValidators();
-        campo.markAsUntouched(); 
-        campo.setValue(''); // 
+    camposAValidar.forEach(nombreCampo => {
+      const campo = this.incidenciaForm.get(nombreCampo);
+
+      if (campo) {
+        if (esCliente) {
+
+          campo.setValidators([Validators.required]);
+        } else {
+
+          campo.clearValidators();
+          campo.markAsUntouched();
+          campo.setValue(''); // 
+        }
+
+
+        campo.updateValueAndValidity();
       }
+    });
 
 
-      campo.updateValueAndValidity();
-    }
-  });
-
-  
-  this.incidenciaForm.updateValueAndValidity();
-}
+    this.incidenciaForm.updateValueAndValidity();
+  }
 
   validarDatos(seccion: string): boolean {
 
@@ -466,7 +466,7 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
 
 
   createResponsable(asignado: IAgentesAsignadosResponse): FormGroup {
-   
+
     return this.fb.group({
       IdAsignacionEnviada: [0],
       IdAsignacionIncidencia: [0],
@@ -797,7 +797,7 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
 
     this.noCliente = datos.GFCLINUM;
     this.isCliente = true;
-    this.checkCliente=true;
+    this.checkCliente = true;
     this.buscar = false;
     this.readonly = true;
   }
@@ -835,7 +835,7 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
       this.methodsService.HttpGet('Catalagos/get-tipohomologacion', {}).subscribe({
         next: (response: ResponseData<ITipoHomologacionResponse[]>) => {
           this.TipoHomologacion = response.data;
-    
+
           this.isLoading = false;
         }, error: () => {
 
@@ -846,7 +846,7 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
       this.methodsService.HttpGet('Catalagos/get-homologacion', {}).subscribe({
         next: (response: ResponseData<IHomologacionResponse[]>) => {
           this.Homologacion = response.data;
-    
+
           this.isLoading = false;
         }, error: () => {
 
@@ -893,7 +893,7 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
       this.methodsService.HttpGet('Catalagos/get-TipoEnvioEmail', {}).subscribe({
         next: (response: ResponseData<ITipoEnvioEmailResponse[]>) => {
           this.TipoEnvioEmail = response.data;
-        
+
           this.isLoading = false;
         }, error: () => {
           this.isLoading = false;
@@ -1028,17 +1028,16 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
     var IdLlamadaCategoria = llamadaCategoria.IdLlamadaCategoria;
 
 
-    if(IdLlamadaCategoria == 0)
-    {
-       this.otroTipoLlamada = true;
-       this.readonlyHomologacion = true;
-      
+    if (IdLlamadaCategoria == 0) {
+      this.otroTipoLlamada = true;
+      this.readonlyHomologacion = true;
 
-  }
-  else {
-  this.otroTipoLlamada = false;
-  this.readonlyHomologacion = false;
-  this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
+
+    }
+    else {
+      this.otroTipoLlamada = false;
+      this.readonlyHomologacion = false;
+      this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
     }
     const resultados: ICasoCategoriaResponse[] = this.CasoCategoria.filter(item => item.IdLlamadaCategoria === IdLlamadaCategoria);
 
@@ -1261,7 +1260,8 @@ if (this.llamadaCtrl.value?.IdLlamadaCategoria == undefined || this.llamadaCtrl.
             Estatus: estatus == null ? '' : estatus.Codigo,
             Usuario: this.creadoPor,
             Tipo: '',
-            Registro: ''
+            Registro: '',
+            Reenvio: result.Reenvio
           }
           this.Seguimientos.push(seguimiento);
         }

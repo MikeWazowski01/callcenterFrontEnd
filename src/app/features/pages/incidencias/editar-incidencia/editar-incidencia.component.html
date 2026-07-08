@@ -271,7 +271,7 @@
                 </mat-form-field>
                 <div style="color: red">
                   <mat-checkbox
-                  [className]="escliente ? 'contenedor-bloqueado' : ''"
+                    [className]="escliente ? 'contenedor-bloqueado' : ''"
                     formControlName="EsCliente"
                     style="color: green !important"
                     >Es Cliente</mat-checkbox
@@ -422,7 +422,9 @@
                   </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field
-                 [className]="readonlyHomologacion ? 'contenedor-bloqueadoCaso' : ''"
+                  [className]="
+                    readonlyHomologacion ? 'contenedor-bloqueadoCaso' : ''
+                  "
                   appearance="outline"
                   class="form-field"
                   style="width: 62% !important"
@@ -486,22 +488,22 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-                     @if(otroTipoLlamada == true){
+              @if (otroTipoLlamada == true) {
                 <div class="form-row" style="padding-left: 50px">
-                <mat-form-field
-                  appearance="outline"
-                  class="form-field"
-                  style="width: 85% !important"
-                >
-                  <mat-label>Otro Tipo de Llamada</mat-label>
-                  <input
-                    class="mayus_input"
-                    matInput
-                    placeholder="Otro Tipo de Llamada"
-                    formControlName="OtraLlamada"
-                  />
-                </mat-form-field>
-              </div>
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field"
+                    style="width: 85% !important"
+                  >
+                    <mat-label>Otro Tipo de Llamada</mat-label>
+                    <input
+                      class="mayus_input"
+                      matInput
+                      placeholder="Otro Tipo de Llamada"
+                      formControlName="OtraLlamada"
+                    />
+                  </mat-form-field>
+                </div>
               }
               <div class="form-row" style="padding-left: 50px">
                 <mat-form-field
@@ -683,6 +685,20 @@
                     placeholder="Compromiso para la mejora"
                     style="resize: none !important"
                     formControlName="Compromiso"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 100% !important"
+                >
+                  <mat-label>Satisfacción del Cliente</mat-label>
+                  <textarea
+                    class="mayus_textarea"
+                    matInput
+                    placeholder="Satisfacción del Cliente"
+                    style="resize: none !important"
+                    formControlName="Satisfaccion"
                   ></textarea>
                 </mat-form-field>
                 <mat-form-field
@@ -914,7 +930,7 @@
                           {{ element.NombreAgente }}
                         </mat-cell>
                       </ng-container>
- <ng-container matColumnDef="sucursal">
+                      <ng-container matColumnDef="sucursal">
                         <mat-header-cell
                           class="table-header"
                           *matHeaderCellDef

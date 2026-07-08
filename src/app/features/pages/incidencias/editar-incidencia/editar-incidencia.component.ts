@@ -1,6 +1,6 @@
 
 import { IAgentesAsignadosResponse, IAgentesAsigResponse, ICasoCategoriaResponse, IFechaHora, IHomologacionResponse, ILlamadaCategoriaResponse, ILocalidades, IMunicipios, IResponsablesResponse, ITipoEnvioEmailResponse, ITipoHomologacionResponse, ITipoMotivoAtrasoResponse, ITipoSeguimientoResponse } from './../../../../shared/models/Catalogos';
-import { Component, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, Inject, LOCALE_ID, OnInit, signal, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -38,7 +38,6 @@ import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { IVerificacion } from '../../../../shared/models/Verficiacion';
 import { PermisosService } from '../../../../core/services/permisos.service';
-import { PermisosEnum } from '../../../../shared/Enum/PermisosEnum';
 import { HasPermissionDirective } from '../../../../shared/directives/has-permission.directive';
 import { Router } from '@angular/router';
 
@@ -48,7 +47,7 @@ import { Router } from '@angular/router';
   standalone: true,
   providers: [
     provideNativeDateAdapter(),
-    { provide: MAT_DATE_LOCALE, useValue: 'es-MX' },
+
     DatePipe, CurrencyPipe],
   imports: [
     MatExpansionModule,
@@ -122,11 +121,11 @@ export class EditarIncidenciaComponent implements OnInit {
   Verificaciones: IVerificacion[] = [];
   DataSeguimientos: ISeguimiento[] = [];
   buscar: boolean = false;
-  displayedColumns: string[] = ['acciones', 'responsable', 'sucursal','puesto', 'email', 'tipoenvio', 'enviado', 'reenviar'];
+  displayedColumns: string[] = ['acciones', 'responsable', 'sucursal', 'puesto', 'email', 'tipoenvio', 'enviado', 'reenviar'];
   displayedColumnsFile: string[] = ['acciones', 'nombre', 'tipo'];
   durationInSeconds = 5;
   creadoPor!: string;
-    sucursal: string = '';
+  sucursal: string = '';
   isLoadingSave: boolean = false;
   otroTipoLlamada: boolean = false;
   validacionSecciones: string[] = [];
@@ -137,11 +136,11 @@ export class EditarIncidenciaComponent implements OnInit {
   Homologacion: IHomologacionResponse[] = [];
   LlamadaCategoria: ILlamadaCategoriaResponse[] = [];
   IdIncidencia: number = 0;
-  readonlyHomologacion:boolean=false;
+  readonlyHomologacion: boolean = false;
   Readonly: boolean = true;
   readonlyTipoH: boolean = true;
   readonlyH: boolean = true;
-  escliente:boolean=true;
+  escliente: boolean = true;
   totalVerificaciones: boolean = false;
   canEdit: boolean = false;
   finalizado: boolean = false;
@@ -230,7 +229,7 @@ export class EditarIncidenciaComponent implements OnInit {
         Homologacion: [null],
         TipoMotivoAtraso: [0],
         MotivoAtraso: [''],
-        OtraLlamada:['']
+        OtraLlamada: ['']
       }),
       DatosAgenteAsignado: this.fb.array([]),
       DatosEvidencias: this.fb.array([]),
@@ -250,8 +249,6 @@ export class EditarIncidenciaComponent implements OnInit {
     this.creadoPor = localStorage.getItem('usuario')!;
   }
   ngOnInit(): void {
-
-    this.canEdit = this.permisosService.hasPermission('Incidencia', PermisosEnum.Editar);
 
     this.creadoPor = localStorage.getItem('usuario')!;
 
@@ -291,7 +288,7 @@ export class EditarIncidenciaComponent implements OnInit {
       map(value => this._filterAgentesAsignado(value))
     );
 
-    
+
     this.CasoFilter = this.CasoCtrl.valueChanges.pipe(
       startWith(''),
       map(value => this._filterCaso(value))
@@ -402,29 +399,29 @@ export class EditarIncidenciaComponent implements OnInit {
 
   evaluarCamposCondicionales(esCliente: boolean) {
 
-  const camposAValidar = ['DatosPersonales.INE', 'DatosPersonales.Telefono','DatosPersonales.Curp','DatosPersonales.Direccion'];
+    const camposAValidar = ['DatosPersonales.INE', 'DatosPersonales.Telefono', 'DatosPersonales.Curp', 'DatosPersonales.Direccion'];
 
-  
-  camposAValidar.forEach(nombreCampo => {
-    const campo = this.incidenciaForm.get(nombreCampo);
 
-    if (campo) {
-      if (esCliente) {
-        
-        campo.setValidators([Validators.required]);
-      } else {
-     
-        campo.clearValidators();
-        campo.markAsUntouched(); 
-        campo.setValue(''); // 
+    camposAValidar.forEach(nombreCampo => {
+      const campo = this.incidenciaForm.get(nombreCampo);
+
+      if (campo) {
+        if (esCliente) {
+
+          campo.setValidators([Validators.required]);
+        } else {
+
+          campo.clearValidators();
+          campo.markAsUntouched();
+          campo.setValue(''); // 
+        }
+
+
+        campo.updateValueAndValidity();
       }
-
-
-      campo.updateValueAndValidity();
-    }
-  });
-   this.incidenciaForm.updateValueAndValidity();
-}
+    });
+    this.incidenciaForm.updateValueAndValidity();
+  }
 
 
   validarDatos(seccion: string): boolean {
@@ -506,12 +503,14 @@ export class EditarIncidenciaComponent implements OnInit {
   }
 
   createSeguimientos(seguimiento: any): FormGroup {
+
     return this.fb.group({
       IdSeguimiento: [seguimiento.IdSeguimiento],
       IdIncidencia: [seguimiento.IdIncidencia],
       FechaRegistro: [seguimiento.FechaRegistro],
       Descripcion: [seguimiento.Descripcion],
-      TipoSeguimiento: [seguimiento.TipoSeguimiento]
+      TipoSeguimiento: [seguimiento.TipoSeguimiento],
+      Reenvio: [seguimiento.Reenvio]
 
     });
   }
@@ -729,26 +728,25 @@ export class EditarIncidenciaComponent implements OnInit {
 
     var IdLlamadaCategoria = llamadaCategoria.IdLlamadaCategoria;
 
-    
 
-    if(IdLlamadaCategoria == 0)
-    {
-       this.otroTipoLlamada = true;
-       this.readonlyHomologacion = true;
-      
 
-  }
-  else {
-  this.otroTipoLlamada = false;
-  this.readonlyHomologacion = false;
-  this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
+    if (IdLlamadaCategoria == 0) {
+      this.otroTipoLlamada = true;
+      this.readonlyHomologacion = true;
+
+
+    }
+    else {
+      this.otroTipoLlamada = false;
+      this.readonlyHomologacion = false;
+      this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
     }
 
     const resultados: ICasoCategoriaResponse[] = this.CasoCategoria.filter(item => item.IdLlamadaCategoria === IdLlamadaCategoria);
-    
+
     this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(0);
     this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(0);
- 
+
     this.CasoFiltroCategoria = resultados;
   }
 
@@ -791,12 +789,13 @@ export class EditarIncidenciaComponent implements OnInit {
             Responsable: response.DatosIncidencia.Responsable,
             AnalisisOrigen: response.DatosIncidencia.AnalisisOrigen,
             MotivoLlamada: response.DatosIncidencia.MotivoLlamada,
+            Satisfaccion: response.DatosIncidencia.Satisfaccion,
             Caso: response.DatosIncidencia.Caso,
             TipoHomologacion: response.DatosIncidencia.TipoHomologacion,
             Homologacion: response.DatosIncidencia.Homologacion,
             TipoMotivoAtraso: response.DatosIncidencia.TipoMotivoAtraso,
             MotivoAtraso: response.DatosIncidencia.MotivoAtraso,
-            OtraLlamada:response.DatosIncidencia.OtraLlamada
+            OtraLlamada: response.DatosIncidencia.OtraLlamada
           },
           DatosCredito: {
             Grupo: response.DatosCredito.Grupo,
@@ -824,17 +823,17 @@ export class EditarIncidenciaComponent implements OnInit {
           }
         });
 
-        if(response.DatosIncidencia.OtraLlamada.length > 0){
+        if (response.DatosIncidencia.OtraLlamada.length > 0) {
           this.readonlyHomologacion = true;
           this.otroTipoLlamada = true;
-        }else{
+        } else {
           this.readonlyHomologacion = true;
           this.otroTipoLlamada = false;
         }
 
         this.isCliente = response.DatosPersonales.EsCliente;
         this.Readonly = response.DatosPersonales.EsCliente;
-        this.escliente=response.DatosPersonales.EsCliente;
+        this.escliente = response.DatosPersonales.EsCliente;
         const textoBuscarResponsable = response.DatosIncidencia.Responsable.toString().trim();
         //const res = this.Responsables.find(item => item.IdResponsable == response.DatosIncidencia.Responsable);
         const resResponsable = this.Responsables.find(item => item.IdResponsable.trim().includes(textoBuscarResponsable));
@@ -853,7 +852,7 @@ export class EditarIncidenciaComponent implements OnInit {
         }
 
         response.DatosAgenteAsignado?.forEach((element: IAgentesAsigResponse) => {
-   
+
           const agente = {
             IdAgente: element.IdAgente,
             IdAsignacionEnviada: element.IdAsignacionEnviada,
@@ -861,7 +860,7 @@ export class EditarIncidenciaComponent implements OnInit {
             NombreAgente: element.NombreAgente,
             Puesto: element.Puesto,
             Email: element.Email,
-            Sucursal:element.Sucursal,
+            Sucursal: element.Sucursal,
             Activo: element.Activo,
             EmailEnviado: element.EmailEnviado,
             TipoEnvio: element.TipoEnvio,
@@ -884,7 +883,8 @@ export class EditarIncidenciaComponent implements OnInit {
           Usuario: '',
           Estatus: '',
           Tipo: element.Tipo,
-          Registro: element.Registro
+          Registro: element.Registro,
+          Reenvio: element.Reenvio
         })) || [];
 
         this.Verificaciones = response.DatosVerificacion?.map((element: IVerificacion) => ({
@@ -1135,7 +1135,7 @@ export class EditarIncidenciaComponent implements OnInit {
 
     var IdTipoHomologacionCategoria = caso.IdTipoHomologacionCategoria;
     var IdHomologacionCategoria = caso.IdHomologacionCategoria;
-  
+
     this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(IdTipoHomologacionCategoria);
     this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(IdHomologacionCategoria);
 
@@ -1144,7 +1144,7 @@ export class EditarIncidenciaComponent implements OnInit {
 
   onSelectionAgentesAsignados(responsable: IResponsables) {
     this.puesto = responsable.Puesto;
-     this.sucursal = responsable.Sucursal
+    this.sucursal = responsable.Sucursal
     this.email = responsable.Email;
   }
 
@@ -1365,7 +1365,7 @@ export class EditarIncidenciaComponent implements OnInit {
       window.URL.revokeObjectURL(blobUrl);
 
     } catch (error) {
-       this.openSnackBar('Error al procesar la descarga desde Base64');
+      this.openSnackBar('Error al procesar la descarga desde Base64');
     }
   }
 
@@ -1448,6 +1448,7 @@ export class EditarIncidenciaComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
 
         if (result != 'close') {
+
           const datosIncidencia = this.incidenciaForm.value.DatosIncidencia;
 
           const estatus = this.Estatus.find(item => item.IdEstatus == datosIncidencia.Estatus);
@@ -1457,6 +1458,7 @@ export class EditarIncidenciaComponent implements OnInit {
             IdSeguimiento: 0,
             IdIncidencia: this.IdIncidencia,
             TipoSeguimiento: result.TipoSeguimiento,
+            Reenvio: result.Reenvio,
             FechaRegistro: new Date,// this.FechaHora[0].fechaInicio + ' ' + this.FechaHora[0].horaInicio,
             Descripcion: result.Descripcion,
             Categoria: categoria == null ? '' : categoria.Codigo,
@@ -1466,6 +1468,7 @@ export class EditarIncidenciaComponent implements OnInit {
             Registro: this.creadoPor
           };
           this.Seguimientos.push(seguimiento);
+
         }
 
 

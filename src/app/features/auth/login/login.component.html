@@ -1,32 +1,52 @@
 <div class="login-container">
   <mat-card class="login-card">
-      <img mat-card-image src="{{logo}}" class="logo-card" alt="logo Tow" />
-    
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
-        
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Usuario</mat-label>
-            <input matInput formControlName="usuario" type="text" required />
-          </mat-form-field>
+    <img mat-card-image src="{{ logo }}" class="logo-card" alt="logo Tow" />
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Contraseña</mat-label>
-            <input matInput formControlName="password" type="password" required />
-          </mat-form-field>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Usuario</mat-label>
+        <input
+          matInput
+          formControlName="usuario"
+          type="text"
+          autocomplete="usuario"
+          required
+        />
+      </mat-form-field>
 
-          <button mat-raised-button color="primary" class="full-width button-login" type="submit" [disabled]="loginForm.invalid">
-              @if(isApiLoading){ 
-                <mat-icon class="u-color-white" style="padding-top: 10px;">
-                  <mat-spinner class="mat-spinner" diameter="20"></mat-spinner>
-                </mat-icon>
-              }@else{
-                Ingresar
-              }
-          </button>
-          <a mat-raised-button class="full-width color-general button-login" routerLink="/recuperar-contrasena">
-            <span class="u-color-white">¿Olvidaste tu contraseña?</span>
-          </a>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contraseña</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
+      </mat-form-field>
 
-      </form>
+      <button
+        mat-raised-button
+        color="primary"
+        class="full-width button-login"
+        type="submit"
+        [disabled]="loginForm.invalid"
+      >
+        @if (isApiLoading) {
+          <mat-icon class="u-color-white" style="padding-top: 10px">
+            <mat-spinner class="mat-spinner" diameter="20"></mat-spinner>
+          </mat-icon>
+        } @else {
+          Ingresar
+        }
+      </button>
+      <a
+        mat-raised-button
+        class="full-width color-general button-login"
+        routerLink="/recuperar-contrasena"
+      >
+        <span class="u-color-white">¿Olvidaste tu contraseña?</span>
+      </a>
+    </form>
   </mat-card>
 </div>

@@ -214,7 +214,7 @@ export class BuscarClienteComponent implements OnInit {
   }
 
   seleccionarCliente(dato: any) {
-    console.log(dato)
+
     if (dato.INCIDENCIA)
       this.openSnackBar('El cliente ya cuenta con una Incidencia pendiente.');
     else

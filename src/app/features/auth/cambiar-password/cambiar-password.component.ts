@@ -51,7 +51,6 @@ export class CambiarPasswordComponent implements OnInit {
     // Extraemos el state de forma segura
     this.data = navegacion?.extras.state;
 
-    console.log(this.data.usuario)
     this.UpdatePasswordForm = this.fb.group({
       usuario: [this.data.usuario],
       passwordAnterior: ['', [Validators.required]],
@@ -69,9 +68,6 @@ export class CambiarPasswordComponent implements OnInit {
     this.loginService.HttpPost('Administrador/updatepassword-usuario', {}, this.UpdatePasswordForm.value).subscribe({
       next: (response) => {
 
-        console.log(response)
-
-
 
         this.openSnackBar("Inicie session con su nuevo password");
 
@@ -81,7 +77,6 @@ export class CambiarPasswordComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
 
-        console.log(error)
         if (error.status == 0) {
 
           this.isApiLoading = false;

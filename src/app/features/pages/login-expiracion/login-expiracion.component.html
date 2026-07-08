@@ -5,12 +5,24 @@
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Usuario</mat-label>
-        <input matInput formControlName="usuario" type="text" required />
+        <input
+          matInput
+          formControlName="usuario"
+          type="text"
+          autocomplete="usuario"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" type="password" required />
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
       </mat-form-field>
 
       <button

@@ -93,22 +93,44 @@ export class ReporteEstadoPrioridadComponent implements OnInit {
 
         const datosParaExcel = this.Reporte.map(cliente => {
           return {
-            'Folio': cliente.Folio,
-            'No Cliente': cliente.NoCliente,
-            'Persona': cliente.Persona,
-            'Es Cliente': cliente.EsCliente,
-            'Analisis Origen': cliente.AnalisisOrigen,
-            'Solucion Acuerdo': cliente.SolucionAcuerdo,
-            'Compromiso Mejora': cliente.CompromisoMejora,
+            'Incidencia': cliente.Incidencia,
+            'Año': cliente.Anio,
+            'Mes': cliente.Mes,
+            'Dia': cliente.Dia,
+            'Fecha Corte': cliente.FechaCorte,
+            'Folio Incidencia': cliente.Folio,
+            'Nombre': cliente.Nombre,
+            'Cod Usuario': cliente.NoCliente,
             'Fecha Registro': cliente.FechaRegistro,
             'Fecha Limite': cliente.FechaLimite,
-            'Dias Atraso': cliente.Da,
-            'Dias Totales': cliente.DiasTotalesAtencion,
-            'Nombre Responsable': cliente.NombreResponsable,
-            'Prioridad': cliente.Prioridad,
-            'Categoria': cliente.Categoria,
+            'Fecha Fin': cliente.FechaFinalizacion,
             'Estatus': cliente.Estatus,
-            'Fecha Finalización': cliente.FechaFinalizacion,
+            'Nombre(G.S)': cliente.Grupo,
+            'Ciclo Cliente': cliente.Ciclo,
+            'Promotor': cliente.Promotor,
+            'Zona Financiera': cliente.ZonaFinanciera,
+            'Surcursal': cliente.Sucursal,
+            'Tipo de Producto': cliente.TipoProducto,
+            'Tipo Incidencia': cliente.TipoIncidencia,
+            'Motivo de Incidencia': cliente.MotivoIncidencia,
+            'Responsable de Seguimiento': cliente.NombreResponsable,
+            'Dias Atraso': cliente.Da,
+            'Dias de Atención': cliente.DiasTotalesAtencion,
+            'No. Reenvios de Incidencia': cliente.NoReenvio,
+            'Satisfacción Cliente': cliente.Satisfaccion,
+            'Motivo de Atraso de Incidencia': cliente.MotivoAtraso,
+            'Origen del Problema': cliente.AnalisisOrigen,
+            'Solución y/o Acuerdo': cliente.SolucionAcuerdo,
+            'Compromiso para la Mejora': cliente.CompromisoMejora,
+            'Motivo de Llamada': cliente.MotivoLlamada,
+            'Caso': cliente.CasoCategorias,
+            'Tipo Homologación': cliente.TipoHomologacion,
+            'Homologacíon': cliente.Homologacion,
+            'AUDITORIA/G. RIESGOS Y SEGUROS': cliente.AuditoriaRiesgos,
+            ' ¿SE RECIBE SEGUIMIENTO DENTRO DEL PLAZO DE ATENCIÓN?': cliente.RecibeSeguimiento,
+            'MEDIO DE CONTACTO DEL CLIENTE': cliente.MedioContacto,
+            'EN PROMOCIONES COMO SE ENTERO DE CONSERVA': cliente.Promociones
+
           };
         });
 
@@ -149,6 +171,17 @@ export class ReporteEstadoPrioridadComponent implements OnInit {
         });
       });
 
+      for (const cellId in worksheet) {
+        // Verificamos que la celda tenga datos y que no sea una propiedad interna de SheetJS (como !cols, !ref, etc.)
+        if (worksheet[cellId] && cellId[0] !== '!') {
+          worksheet[cellId].s = {
+            alignment: {
+              horizontal: 'center', // Centrado horizontal
+              vertical: 'center'    // Centrado vertical
+            }
+          };
+        }
+      }
       // Aplicamos los anchos a la propiedad !cols de la hoja de SheetJS
       // El "+ 5" es un margen de espacio para que no quede el texto rozando la línea divisoria
       worksheet['!cols'] = columnWidths.map(w => ({ width: w + 5 }));

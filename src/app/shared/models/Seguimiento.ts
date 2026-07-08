@@ -9,5 +9,6 @@ export interface ISeguimiento {
     Usuario: string,
     Estatus: string,
     Registro: string,
-    Tipo: string
+    Tipo: string,
+    Reenvio: boolean
 }

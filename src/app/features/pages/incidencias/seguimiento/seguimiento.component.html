@@ -15,8 +15,11 @@
           [readonly]="readOnly"
         />
       </mat-form-field>
-      <section class="example-section">
-        <mat-checkbox formControlName="pepperoni">Reenvio</mat-checkbox>
+      <section
+        class="example-section"
+        *appHasPermission="'Seguimiento:Reenvio'"
+      >
+        <mat-checkbox formControlName="Reenvio">Reenvio</mat-checkbox>
       </section>
       <mat-form-field
         appearance="outline"

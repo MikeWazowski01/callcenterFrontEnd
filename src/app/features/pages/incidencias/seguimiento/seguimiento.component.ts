@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AvisosComponent } from '../../../../shared/avisos/avisos.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HasPermissionDirective } from '../../../../shared/directives/has-permission.directive';
 
 @Component({
   selector: 'app-seguimiento',
@@ -28,7 +29,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ReactiveFormsModule,
     CommonModule,
     ToolbarComponent,
-    MatSelectModule],
+    MatSelectModule,
+    HasPermissionDirective],
   templateUrl: './seguimiento.component.html',
   styleUrl: './seguimiento.component.css'
 })
@@ -56,7 +58,8 @@ export class SeguimientoComponent implements OnInit {
 
     this.seguimientoForm = this.fb.group({
       Descripcion: ['', Validators.required],
-      FechaCreacion: [fechaFormateada]
+      FechaCreacion: [fechaFormateada],
+      Reenvio: [false]
     });
   }
 
