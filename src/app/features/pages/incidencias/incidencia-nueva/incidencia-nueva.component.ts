@@ -18,7 +18,7 @@ import { BuscarClienteComponent } from '../buscar-cliente/buscar-cliente.compone
 import { SeguimientoComponent } from '../seguimiento/seguimiento.component';
 import { VerificacionComponent } from '../verificacion/verificacion.component';
 import { ToolbarComponent } from '../../../../shared/components/toolbar/toolbar.component';
-import { IAgentesAsignadosResponse, IAgentesResponse, ICasoCategoriaResponse, ICategoriasResponse, IEstados, IEstatusResponse, IFechaHora, IHomologacionResponse, ILlamadaCategoriaResponse, ILocalidades, IMunicipios, IPais, IPrioridadResponse, IResponsablesResponse, ITipoEnvioEmailResponse, ITipoHomologacionResponse, ITipoMotivoAtrasoResponse, ITipoSeguimientoResponse } from '../../../../shared/models/Catalogos';
+import { IAgentesAsignadosResponse, IAgentesResponse, ICasoCategoriaResponse, ICategoriasResponse, IEstados, IEstatusResponse, IFechaHora, IHomologacionResponse, ILlamadaCategoriaResponse, ILocalidades, IMunicipios, IPais, IPrioridadResponse, IResponsablesResponse, ISucursalZonaFinanciera, ITipoEnvioEmailResponse, ITipoHomologacionResponse, ITipoMotivoAtrasoResponse, ITipoSeguimientoResponse } from '../../../../shared/models/Catalogos';
 import { IIncidencia } from '../../../../shared/models/Incidencia';
 import { GenericService } from '../../../../core/services/generic.service';
 import { ResponseData } from '../../../../shared/models/response-data.model';
@@ -82,12 +82,15 @@ export class IncidenciaNuevaComponent implements OnInit {
   Categorias: ICategoriasResponse[] = [];
   TipoHomologacion: ITipoHomologacionResponse[] = [];
   Homologacion: IHomologacionResponse[] = [];
+  SelectHomologacion: IHomologacionResponse[] = [];
   AgentesAsignado: IAgentesAsignadosResponse[] = [];
   CasoCategoria: ICasoCategoriaResponse[] = [];
   CasoFiltroCategoria: ICasoCategoriaResponse[] = [];
   Agentes: IAgentesResponse[] = [];
   Responsables: IResponsablesResponse[] = [];
   LlamadaCategoria: ILlamadaCategoriaResponse[] = [];
+  mostrarHomologacion: boolean = false;
+  selectSucursal: string = '';
   //  CasoCategoria: ICasoCategoriaResponse[] = [];
   Pais: IPais[] = [];
   Estados: IEstados[] = [];
@@ -95,6 +98,7 @@ export class IncidenciaNuevaComponent implements OnInit {
   Localidades: ILocalidades[] = [];
   TipoSeguimiento: ITipoSeguimientoResponse[] = [];
   FechaHora: IFechaHora[] = [];
+  SucursalZona: ISucursalZonaFinanciera[] = [];
   isCliente: boolean = false;
   checkCliente: boolean = true;
   fechaHora: boolean = true;
@@ -173,6 +177,8 @@ export class IncidenciaNuevaComponent implements OnInit {
         Localidad: [''],
         Direccion: ['', []],
         EsCliente: [false],
+        Sucursal: [''],
+        ZonaFinanciera: ['']
 
       }),
       DatosCredito: this.fb.group({
@@ -199,11 +205,11 @@ export class IncidenciaNuevaComponent implements OnInit {
         Compromiso: [''],
         MotivoLlamada: [0],
         Caso: [0],
-        TipoHomologacion: [0],
+        //TipoHomologacion: [0],
         Homologacion: [0],
         TipoMotivoAtraso: [0],
         MotivoAtraso: [''],
-        OtraLlamada: ['', []]
+        OtraLlamada: ['', []],
       }),
       DatosAgenteAsignado: this.fb.array([]),
       DatosEvidencias: this.fb.array([]),
@@ -309,6 +315,8 @@ export class IncidenciaNuevaComponent implements OnInit {
     this.fillDatosSeguimientos();
     this.fillDatosVerificacion();
 
+    var sucursal = this.incidenciaForm.get('DatosPersonales.Sucursal')?.value;
+
     const payload = {
       ...this.incidenciaForm.value,
       DatosPersonales: {
@@ -317,7 +325,9 @@ export class IncidenciaNuevaComponent implements OnInit {
         Estado: this.estadoSeleccionado,
         Municipio: this.municipioSeleccionado,
         Localidad: this.localidadCtrl.value?.TABARCOD,
-        EsCliente: this.isCliente
+        EsCliente: this.isCliente,
+        Sucursal: sucursal.IdSucursal,
+        ZonaFinanciera: sucursal.IdSucursal
       },
       DatosIncidencia: {
         ...this.incidenciaForm.value.DatosIncidencia,
@@ -399,7 +409,7 @@ export class IncidenciaNuevaComponent implements OnInit {
 
           campo.clearValidators();
           campo.markAsUntouched();
-          campo.setValue(''); // 
+          // campo.setValue(''); // 
         }
 
 
@@ -832,19 +842,20 @@ export class IncidenciaNuevaComponent implements OnInit {
         }
       });
 
-      this.methodsService.HttpGet('Catalagos/get-tipohomologacion', {}).subscribe({
-        next: (response: ResponseData<ITipoHomologacionResponse[]>) => {
-          this.TipoHomologacion = response.data;
-
-          this.isLoading = false;
-        }, error: () => {
-
-          this.isLoading = false;
-        }
-      });
+      /* this.methodsService.HttpGet('Catalagos/get-tipohomologacion', {}).subscribe({
+         next: (response: ResponseData<ITipoHomologacionResponse[]>) => {
+           this.TipoHomologacion = response.data;
+ 
+           this.isLoading = false;
+         }, error: () => {
+ 
+           this.isLoading = false;
+         }
+       });*/
 
       this.methodsService.HttpGet('Catalagos/get-homologacion', {}).subscribe({
         next: (response: ResponseData<IHomologacionResponse[]>) => {
+          console.log(response)
           this.Homologacion = response.data;
 
           this.isLoading = false;
@@ -934,6 +945,16 @@ export class IncidenciaNuevaComponent implements OnInit {
           this.FechaHora = response.data;
 
           this.cargarDatosIncidencia();
+          this.isLoading = false;
+        }, error: () => {
+          this.isLoading = false;
+        }
+      });
+
+      this.methodsService.HttpGet('Catalagos/get-SucursalZonaFinanciera', {}).subscribe({
+        next: (response: ResponseData<ISucursalZonaFinanciera[]>) => {
+          this.SucursalZona = response.data;
+
           this.isLoading = false;
         }, error: () => {
           this.isLoading = false;
@@ -1031,17 +1052,18 @@ export class IncidenciaNuevaComponent implements OnInit {
     if (IdLlamadaCategoria == 0) {
       this.otroTipoLlamada = true;
       this.readonlyHomologacion = true;
-
+      this.mostrarHomologacion = true;
 
     }
     else {
+      this.mostrarHomologacion = false;
       this.otroTipoLlamada = false;
       this.readonlyHomologacion = false;
       this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
     }
     const resultados: ICasoCategoriaResponse[] = this.CasoCategoria.filter(item => item.IdLlamadaCategoria === IdLlamadaCategoria);
 
-    this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(0);
+    // this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(0);
     this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(0);
 
 
@@ -1050,11 +1072,36 @@ export class IncidenciaNuevaComponent implements OnInit {
 
   onCasoCategoriaChange(caso: ICasoCategoriaResponse) {
 
-    var IdTipoHomologacionCategoria = caso.IdTipoHomologacionCategoria;
+    //var IdTipoHomologacionCategoria = caso.IdTipoHomologacionCategoria;
     var IdHomologacionCategoria = caso.IdHomologacionCategoria;
+    var IdCaso = caso.IdCasoCategoria;
 
-    this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(IdTipoHomologacionCategoria);
-    this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(IdHomologacionCategoria);
+    const homo = this.Homologacion.filter(a => a.IdCasoCategoria === IdCaso);
+   
+    if (homo.length <= 1) {
+       this.SelectHomologacion = homo;
+      this.readonlyH =true;
+      if (IdHomologacionCategoria == 1) {
+        this.mostrarHomologacion = true;
+      }
+      else {
+        this.mostrarHomologacion = false;
+      }
+      console.log(homo[0].IdHomologacionCategoria
+)
+          this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(homo[0].IdHomologacionCategoria);
+
+    }else{
+       this.readonlyH =false;
+          this.SelectHomologacion = homo;
+          console.log(this.SelectHomologacion )
+    }
+
+
+
+    //this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(IdTipoHomologacionCategoria);
+ 
+
 
   }
 
@@ -1313,6 +1360,11 @@ export class IncidenciaNuevaComponent implements OnInit {
       this.openSnackBar("Para agregar verificaciones debe completar la Seccion Datos Incidencia");
     }
 
+
+  }
+
+  onSelectionChangeSucursal(event: any) {
+    this.incidenciaForm.get('DatosPersonales.ZonaFinanciera')?.setValue(event.value.ZonaFinanciera);
 
   }
 

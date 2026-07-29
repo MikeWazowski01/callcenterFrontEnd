@@ -27,17 +27,10 @@ export class VisorArchivoComponent {
 
     if (data.Tipo.includes('audio')) {
       this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(data.Url);
-      /* console.log('audio')
-       this.audio = new Audio(data.Url);
-       this.audio.play();*/
+ 
     } else {
       this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.Url);
     }
-    /* this.audio = new Audio(data.Url);
-     this.audio.play();*/
-
-
-
 
 
   }

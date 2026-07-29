@@ -1,1 +1,47 @@
-<p>editar-usuario works!</p>
+<app-toolbar (close)="closeDialog()" [titulo]="titulo"></app-toolbar>
+<div style="padding-top: 20px">
+  <form [formGroup]="RolesForm" (ngSubmit)="guardar()">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field" style="width: 100% !important">
+        <mat-label>Login</mat-label>
+        <input matInput placeholder="Usuario" style="resize: none !important" formControlName="Usuario" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" style="width: 100% !important">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" style="resize: none !important" formControlName="Email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" style="width: 100% !important">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre" style="resize: none !important" formControlName="NombreUsuario" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" style="width: 100% !important">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Password" style="resize: none !important" formControlName="Password" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 100% !important">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="IdRol">
+          @for (roles of RolesUsuarios; track roles.IdRol) {
+          <mat-option [value]="roles.IdRol">{{ roles.NombreRol }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+       <mat-checkbox
+                    formControlName="Activo"
+                    >Activo</mat-checkbox>
+    </div>
+
+    <div class="form-row">
+      <button type="submit" (click)="guardar()" matIconButton color="primary" class="buttonSave pointer">
+        @if (!isLoadingSave) {
+        <mat-icon class="u-color-white">save</mat-icon>
+        <span class="u-color-white spanButton">Guardar</span>
+        } @else {
+        <mat-spinner class="white-spinner" mode="indeterminate" diameter="30" strokeWidth="3">
+        </mat-spinner>
+        }
+
+      </button>
+    </div>
+  </form>
+</div>

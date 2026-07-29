@@ -96,6 +96,11 @@ export interface IFechaHora {
   horaFin: string;
 }
 
+export interface ISucursalZonaFinanciera {
+  IdSucursal: string;
+  Sucursal: string;
+  ZonaFinanciera: string;
+}
 export interface IRolesUsuario {
   IdRol: number;
   NombreRol: string;
@@ -113,13 +118,15 @@ export interface ITipoHomologacionResponse {
 
 export interface IHomologacionResponse {
   IdHomologacionCategoria: number;
+  IdLlamadaCategoria: number;
+ IdCasoCategoria: number;
   Codigo: string;
 }
 
 export interface ICasoCategoriaResponse {
   IdCasoCategoria: number;
   IdLlamadaCategoria: number;
-  IdTipoHomologacionCategoria: number;
+  //IdTipoHomologacionCategoria: number;
   IdHomologacionCategoria: number;
   Codigo: string;
 }

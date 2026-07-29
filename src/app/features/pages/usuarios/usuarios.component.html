@@ -127,7 +127,7 @@
       <button
         class="btn_add_lista pointer"
         (click)="limpiarFormualrio()"
-        title="Nueva Incidencia"
+        title="Nuevo Usuario"
       >
         <mat-icon class="color-general icon_add_lista">autorenew</mat-icon>
       </button>
@@ -147,25 +147,12 @@
           >
           <mat-cell class="col-angosta-accion" *matCellDef="let element">
             <button
-              title="Ver Datos Incidecia"
+              title="Editar Usuario"
               mat-icon-button
-              (click)="datosIncidencias(element)"
-              mat-icon-button
-            >
-              <mat-icon class="color-general">folder_eye</mat-icon>
-            </button>
-
-            <button
-              title="Ver Detalles"
-              mat-icon-button
-              (click)="verDetalles(element)"
+              (click)="EditarUsuario(element)"
               mat-icon-button
             >
-              <mat-icon class="color-general">visibility</mat-icon>
-            </button>
-
-            <button title="Eliminar" mat-icon-button>
-              <mat-icon class="color-delete">delete</mat-icon>
+              <mat-icon class="color-general">edit</mat-icon>
             </button>
           </mat-cell>
         </ng-container>
@@ -235,7 +222,7 @@
           >
             Estatus
           </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{ element.estatus }} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{ element.Estatus }} </mat-cell>
         </ng-container>
         <!-- Encabezados y filas -->
         <mat-header-row

@@ -254,7 +254,40 @@
                   />
                 </mat-form-field>
               </div>
+              @if(!escliente){
+<div class="form-row" style="padding-left: 50px">
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Sucursal</mat-label>
+                  <mat-select formControlName="Sucursal" (selectionChange)="onSelectionChangeSucursal($event)">
+                    @for (sucursal of SucursalZonaFina; track $index) {
+                      <mat-option [value]="sucursal">{{
+                        sucursal.Sucursal
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
 
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field"
+                  style="width: 30% !important"
+                >
+                  <mat-label>Zona Financiera</mat-label>
+                  <input
+                    class="mayus_input"
+                    matInput
+                    placeholder="Zona Financiera"
+                    formControlName="ZonaFinanciera"
+                    [readonly]="readonlyZona"
+                  />
+                </mat-form-field>
+
+              </div>
+              }
+ 
               <div class="form-row" style="padding-left: 50px">
                 <mat-form-field
                   appearance="outline"
@@ -271,7 +304,7 @@
                 </mat-form-field>
                 <div style="color: red">
                   <mat-checkbox
-                    [className]="escliente ? 'contenedor-bloqueado' : ''"
+                    [className]="escliente ? 'contenedor-bloqueado' : 'contenedor-bloqueado'"
                     formControlName="EsCliente"
                     style="color: green !important"
                     >Es Cliente</mat-checkbox
@@ -453,7 +486,7 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field
+               <!-- <mat-form-field
                   [className]="readonlyTipoH ? 'contenedor-bloqueado' : ''"
                   appearance="outline"
                   class="form-field"
@@ -468,25 +501,27 @@
                       >
                     }
                   </mat-select>
-                </mat-form-field>
-                <mat-form-field
+                </mat-form-field>-->
+                @if(mostrarHomologacion == false){
+                  <mat-form-field
                   [className]="readonlyH ? 'contenedor-bloqueado' : ''"
                   appearance="outline"
                   class="form-field"
-                  style="width: 67% !important"
+                  style="width: 85% !important"
                 >
                   <mat-label>Homologación</mat-label>
                   <mat-select
                     formControlName="Homologacion"
                     [ngClass]="{ 'select-readonly': readonlyH }"
                   >
-                    @for (homo of Homologacion; track homo) {
+                    @for (homo of SelectHomologacion; track homo.IdHomologacionCategoria) {
                       <mat-option [value]="homo.IdHomologacionCategoria">{{
                         homo.Codigo
                       }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
+                }
               </div>
               @if (otroTipoLlamada == true) {
                 <div class="form-row" style="padding-left: 50px">

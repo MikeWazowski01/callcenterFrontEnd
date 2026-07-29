@@ -124,7 +124,7 @@ export class ReporteEstadoPrioridadComponent implements OnInit {
             'Compromiso para la Mejora': cliente.CompromisoMejora,
             'Motivo de Llamada': cliente.MotivoLlamada,
             'Caso': cliente.CasoCategorias,
-            'Tipo Homologación': cliente.TipoHomologacion,
+            /*'Tipo Homologación': cliente.TipoHomologacion,*/
             'Homologacíon': cliente.Homologacion,
             'AUDITORIA/G. RIESGOS Y SEGUROS': cliente.AuditoriaRiesgos,
             ' ¿SE RECIBE SEGUIMIENTO DENTRO DEL PLAZO DE ATENCIÓN?': cliente.RecibeSeguimiento,

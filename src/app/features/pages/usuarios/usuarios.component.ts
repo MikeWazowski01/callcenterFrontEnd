@@ -29,6 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { IUsuarios } from '../../../shared/models/Usuarios';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { NuevoUsuarioComponent } from './nuevo-usuario/nuevo-usuario.component';
+import { EditarUsuarioComponent } from './editar-usuario/editar-usuario.component';
 
 @Component({
   selector: 'app-usuarios',
@@ -213,7 +214,7 @@ export class UsuariosComponent implements OnInit {
     setTimeout(() => {
 
       this.methodsService.HttpPost('Usuarios/get-usuarios', {}, params).subscribe((response: Pagination<IUsuarios[]>) => {
-
+console.log(response.elements)
         this.dataSource.data = response.elements;
         this.length = response.totalRecords;
         this.isLoading = false;
@@ -235,6 +236,9 @@ export class UsuariosComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+
+     this.limpiarFormualrio();
+
       if (result === 'success') {
 
       }
@@ -258,33 +262,10 @@ export class UsuariosComponent implements OnInit {
     return opcion?.codigo || '';
   }
 
-  verDetalles(data: any) {
-    if (data.incidencia.length > 0) {
-      const dialogRef = this.dialog.open(DetalleIncidenciaComponent, {
-        data: { incidencia: data.incidencia, Folio: data.folio },
-        autoFocus: false,
-        minWidth: '50%',
-        maxHeight: '500px',
-        disableClose: true,
-        panelClass: 'custom-dialog-container'
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === 'success' || result === 'data null') {
-          // this.GetAdjusterUsers();
-
-        }
-      });
-    } else {
-      this.openSnackBar(`El No. de Folio: ${data.folio} no tiene detalle.`);
-    }
-
-  }
-
-  datosIncidencias(data: any) {
-
-    const dialogRef = this.dialog.open(EditarIncidenciaComponent, {
-      data: { dataIncidencia: data, dataPrioridad: this.Prioridades, dataEstatus: this.Estatus },
+  EditarUsuario(data: any) {
+console.log(data)
+    const dialogRef = this.dialog.open(EditarUsuarioComponent, {
+      data: { data},
       autoFocus: false,
       minWidth: '98%',
       width: '90%',
@@ -294,6 +275,7 @@ export class UsuariosComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+     this.limpiarFormualrio();
       if (result === 'success' || result === 'data null') {
         // this.GetAdjusterUsers();
 

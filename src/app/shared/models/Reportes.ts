@@ -30,7 +30,7 @@ export interface IReportePrioridad {
   CompromisoMejora: string;
   MotivoLlamada: string;
   CasoCategorias: string;
-  TipoHomologacion: string;
+  //TipoHomologacion: string;
   Homologacion: string;
   AuditoriaRiesgos: string;
   RecibeSeguimiento: string;

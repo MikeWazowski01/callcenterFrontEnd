@@ -16,6 +16,9 @@ import { GenericService } from '../../../../core/services/generic.service';
 import { IRolesUsuario } from '../../../../shared/models/Catalogos';
 import { ResponseData } from '../../../../shared/models/response-data.model';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AvisosComponent } from '../../../../shared/avisos/avisos.component';
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -32,27 +35,35 @@ import { MatSelectModule } from '@angular/material/select';
     MatAutocompleteModule,
     MatChipsModule,
     FormsModule,
-    MatSelectModule],
+    MatSelectModule,
+  MatProgressSpinnerModule],
   templateUrl: './nuevo-usuario.component.html',
   styleUrl: './nuevo-usuario.component.css'
 })
 export class NuevoUsuarioComponent {
   titulo: string = 'Nuevo Usuario';
   readOnly = true;
+   durationInSeconds = 5;
   filtroForm!: FormGroup;
   fechaInicio = new Date();
   RolesUsuarios: IRolesUsuario[] = [];
   RolesForm!: FormGroup;
+  isLoadingSave: boolean = false;
+  guardando: boolean = false;
+    private _snackBar = inject(MatSnackBar);
   constructor(
     private dialog: MatDialogRef<NuevoUsuarioComponent>,
     private dialogGeneral: MatDialog,
     private fb: FormBuilder,
     private methodsService: GenericService) {
     this.RolesForm = this.fb.group({
-      Login: ['', [Validators.required, Validators.minLength(5)]],
+      Usuario: ['', [Validators.required, Validators.minLength(5)]],
       Email: ['', Validators.required],
-      Nombre: ['', [Validators.required, Validators.minLength(5)]],
-      Rol: [null, Validators.required]
+      NombreUsuario: ['', [Validators.required, Validators.minLength(5)]],
+      IdRol: [null, Validators.required],
+      Activo:[true],
+      Password:[null,Validators.required],
+      IdUsuario:[0]
     });
   }
 
@@ -118,15 +129,50 @@ export class NuevoUsuarioComponent {
     });
   }
 
-  seguimientoNuevo() {
 
-  }
   guardar() {
-    throw new Error('Method not implemented.');
+ 
+    console.log('entro')
+    console.log(this.RolesForm);
+     this.methodsService.HttpPost('Administrador/register-usuario', {}, this.RolesForm.value).subscribe({
+      next: (response) => {
+console.log(response)
+        this.isLoadingSave = false;
+        this.openSnackBar("El usuario se registro con exito....... ");
+
+        this.closeDialog();
+      },
+      error: (error) => {
+        console.log(error)
+        this.isLoadingSave = false;
+        if (error.status === 401) {
+          this.openSnackBar("No autorizado. Por favor, inicia sesión.");
+          // Aquí puedes redirigir al login o hacer otra acción
+        } else {
+          // Mensaje genérico para otros errores
+
+          this.openSnackBar("Error: " + (error.error.message || "Error desconocido"));
+         // this.openSnackBar("La Vista se cerrara por posibles errores verique que el usuario no fue creado. ");
+
+          this.closeDialog();
+        }
+      }
+    });
   }
   closeDialog() {
 
     this.dialog.close('close');
   }
+
+   openSnackBar(aviso: string) {
+  
+      this._snackBar.openFromComponent(AvisosComponent, {
+  
+        duration: this.durationInSeconds * 1000,
+        data: aviso,
+        panelClass: ['custom-snackbar']
+  
+      });
+    }
 
 }

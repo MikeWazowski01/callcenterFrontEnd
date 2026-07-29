@@ -62,18 +62,6 @@ export class AuthService {
         };
       });
 
-
-      /*
-       IdMenu: number,
-     NombreMenu: string,
-     Ruta: string,
-     Icon: string,
-     Orden: number,
-     IdMenuPadre: number | null,
-     Permisos: string[],
-     SubMenus: IMenus[] */
-
-      //console.log('Menú dinámico y permisos cargados con éxito:', this.menuUsuario);
     } catch (error) {
       console.error('Error al parsear el JSON de menús:', error);
     }

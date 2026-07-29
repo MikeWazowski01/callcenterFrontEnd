@@ -1,5 +1,5 @@
 
-import { IAgentesAsignadosResponse, IAgentesAsigResponse, ICasoCategoriaResponse, IFechaHora, IHomologacionResponse, ILlamadaCategoriaResponse, ILocalidades, IMunicipios, IResponsablesResponse, ITipoEnvioEmailResponse, ITipoHomologacionResponse, ITipoMotivoAtrasoResponse, ITipoSeguimientoResponse } from './../../../../shared/models/Catalogos';
+import { IAgentesAsignadosResponse, IAgentesAsigResponse, ICasoCategoriaResponse, IFechaHora, IHomologacionResponse, ILlamadaCategoriaResponse, ILocalidades, IMunicipios, IResponsablesResponse, ISucursalZonaFinanciera, ITipoEnvioEmailResponse, ITipoHomologacionResponse, ITipoMotivoAtrasoResponse, ITipoSeguimientoResponse } from './../../../../shared/models/Catalogos';
 import { Component, inject, Inject, LOCALE_ID, OnInit, signal, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -97,6 +97,7 @@ export class EditarIncidenciaComponent implements OnInit {
   isLoading: boolean = false;
   noCliente: string = '';
   Prioridades: IPrioridadResponse[] = [];
+  SucursalZonaFina: ISucursalZonaFinanciera[] = [];
   TipoMotivoAtraso: ITipoMotivoAtrasoResponse[] = [];
   Estatus: IEstatusResponse[] = [];
   Incidencias: IIncidencia[] = [];
@@ -134,17 +135,20 @@ export class EditarIncidenciaComponent implements OnInit {
   ArchivosOriginales: IArchivoModel[] = [];
   TipoHomologacion: ITipoHomologacionResponse[] = [];
   Homologacion: IHomologacionResponse[] = [];
+  SelectHomologacion: IHomologacionResponse[] = [];
   LlamadaCategoria: ILlamadaCategoriaResponse[] = [];
   IdIncidencia: number = 0;
   readonlyHomologacion: boolean = false;
   Readonly: boolean = true;
   readonlyTipoH: boolean = true;
   readonlyH: boolean = true;
+  readonlyZona: boolean = false;
   escliente: boolean = true;
   totalVerificaciones: boolean = false;
   canEdit: boolean = false;
   finalizado: boolean = false;
   blobUrlSafe!: SafeUrl;
+  mostrarHomologacion: boolean = false;
   TipoEnvioEmail: ITipoEnvioEmailResponse[] = [];
   dataSource: MatTableDataSource<IAgentesAsigResponse> = new MatTableDataSource<IAgentesAsigResponse>();
 
@@ -198,7 +202,10 @@ export class EditarIncidenciaComponent implements OnInit {
         Municipio: ['',],
         Localidad: [''],
         Direccion: ['', []],
-        EsCliente: [false]
+        EsCliente: [false],
+        Sucursal: [''],
+        ZonaFinanciera: [''],
+        IdDireccion: [0]
 
       }),
       DatosCredito: this.fb.group({
@@ -225,7 +232,7 @@ export class EditarIncidenciaComponent implements OnInit {
         Compromiso: [''],
         MotivoLlamada: [null],
         Caso: [null],
-        TipoHomologacion: [null],
+        // TipoHomologacion: [null],
         Homologacion: [null],
         TipoMotivoAtraso: [0],
         MotivoAtraso: [''],
@@ -333,7 +340,8 @@ export class EditarIncidenciaComponent implements OnInit {
     this.fillDatosEvidencias();
     this.fillDatosSeguimientos();
     this.fillDatosVerificaciones();
-
+    var sucursal = this.incidenciaForm.get('DatosPersonales.Sucursal')?.value;
+    console.log(sucursal)
     const payload = {
       ...this.incidenciaForm.value,
       DatosPersonales: {
@@ -342,7 +350,9 @@ export class EditarIncidenciaComponent implements OnInit {
         Estado: this.estadoSeleccionado,
         Municipio: this.municipioSeleccionado,
         Localidad: this.localidadCtrl.value?.TABARCOD,
-        EsCliente: this.isCliente
+        EsCliente: this.isCliente,
+        Sucursal: this.escliente ? '' : sucursal.IdSucursal,
+        ZonaFinanciera: this.escliente ? '' : sucursal.IdSucursal
       },
       DatosIncidencia: {
         ...this.incidenciaForm.value.DatosIncidencia,
@@ -413,7 +423,7 @@ export class EditarIncidenciaComponent implements OnInit {
 
           campo.clearValidators();
           campo.markAsUntouched();
-          campo.setValue(''); // 
+          // campo.setValue(''); // 
         }
 
 
@@ -733,10 +743,12 @@ export class EditarIncidenciaComponent implements OnInit {
     if (IdLlamadaCategoria == 0) {
       this.otroTipoLlamada = true;
       this.readonlyHomologacion = true;
+      this.mostrarHomologacion = true;
 
 
     }
     else {
+      this.mostrarHomologacion = false;
       this.otroTipoLlamada = false;
       this.readonlyHomologacion = false;
       this.incidenciaForm.get('DatosIncidencia.OtraLlamada')?.setValue('');
@@ -744,7 +756,7 @@ export class EditarIncidenciaComponent implements OnInit {
 
     const resultados: ICasoCategoriaResponse[] = this.CasoCategoria.filter(item => item.IdLlamadaCategoria === IdLlamadaCategoria);
 
-    this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(0);
+    //this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(0);
     this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(0);
 
     this.CasoFiltroCategoria = resultados;
@@ -771,7 +783,9 @@ export class EditarIncidenciaComponent implements OnInit {
             Estado: response.DatosPersonales.Estado,
             Municipio: response.DatosPersonales.Municipio,
             Localidad: response.DatosPersonales.Localidad,
-            Direccion: response.DatosPersonales.Direccion
+            Direccion: response.DatosPersonales.Direccion,
+            Sucursal: response.DatosPersonales.Sucursal,
+            IdDireccion: response.DatosPersonales.IdDireccion,
           },
           DatosIncidencia: {
             IdIncidencia: response.DatosIncidencia.IdIncidencia,
@@ -791,7 +805,7 @@ export class EditarIncidenciaComponent implements OnInit {
             MotivoLlamada: response.DatosIncidencia.MotivoLlamada,
             Satisfaccion: response.DatosIncidencia.Satisfaccion,
             Caso: response.DatosIncidencia.Caso,
-            TipoHomologacion: response.DatosIncidencia.TipoHomologacion,
+            //TipoHomologacion: response.DatosIncidencia.TipoHomologacion,
             Homologacion: response.DatosIncidencia.Homologacion,
             TipoMotivoAtraso: response.DatosIncidencia.TipoMotivoAtraso,
             MotivoAtraso: response.DatosIncidencia.MotivoAtraso,
@@ -806,6 +820,15 @@ export class EditarIncidenciaComponent implements OnInit {
 
 
         });
+
+        const sucursalEncontrada = this.SucursalZonaFina.find(item => item.IdSucursal === response.DatosPersonales.Sucursal);
+        this.incidenciaForm.get('DatosPersonales.Sucursal')?.setValue(sucursalEncontrada);
+        this.incidenciaForm.get('DatosPersonales.ZonaFinanciera')?.setValue(sucursalEncontrada?.ZonaFinanciera);
+        if (response.DatosIncidencia.MotivoLlamada <= 1) {
+          this.mostrarHomologacion = true;
+        } else {
+          this.mostrarHomologacion = false;
+        }
 
         var estatusBuscado = this.Estatus.find(elemento => elemento.IdEstatus === response.DatosIncidencia.Estatus);
         if (estatusBuscado?.Codigo == "FINALIZADO") {
@@ -839,6 +862,19 @@ export class EditarIncidenciaComponent implements OnInit {
         const resResponsable = this.Responsables.find(item => item.IdResponsable.trim().includes(textoBuscarResponsable));
         const resCaso = this.CasoCategoria.find(item => item.IdCasoCategoria == response.DatosIncidencia.Caso);
         const resllama = this.LlamadaCategoria.find(item => item.IdLlamadaCategoria == response.DatosIncidencia.MotivoLlamada);
+        const homo = this.Homologacion.filter(a => a.IdCasoCategoria === resCaso?.IdCasoCategoria);
+
+        if (homo.length <= 1) {
+          this.SelectHomologacion = homo;
+          this.readonlyH = true;
+
+          this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(homo[0].IdHomologacionCategoria);
+
+        } else {
+          this.readonlyH = false;
+          this.SelectHomologacion = homo;
+          console.log(this.SelectHomologacion)
+        }
         if (resResponsable) {
           this.responsableCtrl.setValue(resResponsable);
         }
@@ -1082,11 +1118,12 @@ export class EditarIncidenciaComponent implements OnInit {
       prioridades: this.methodsService.HttpGet('Prioridad/get-prioridad', {}),
       tipoMotivoAtraso: this.methodsService.HttpGet('Catalagos/get-tipoMotivoAtraso', {}),
       motivollmada: this.methodsService.HttpGet('Catalagos/get-motivollamada', {}),
-      tipohomologacion: this.methodsService.HttpGet('Catalagos/get-tipohomologacion', {}),
+      //tipohomologacion: this.methodsService.HttpGet('Catalagos/get-tipohomologacion', {}),
       homologacion: this.methodsService.HttpGet('Catalagos/get-homologacion', {}),
       casocategoria: this.methodsService.HttpGet('Catalagos/get-casocategoria', {}),
       estatus: this.methodsService.HttpGet('Estatus/get-estatus', {}),
       TiposEnvios: this.methodsService.HttpGet('Catalagos/get-TipoEnvioEmail', {}),
+      SucursalZona: this.methodsService.HttpGet('Catalagos/get-SucursalZonaFinanciera', {})
     }).subscribe(res => {
 
       const categorias = res.categorias as ResponseData<ICategoriasResponse[]>;
@@ -1099,12 +1136,13 @@ export class EditarIncidenciaComponent implements OnInit {
       const prioridades = res.prioridades as ResponseData<IPrioridadResponse[]>;
       const tipoMotivoAtraso = res.tipoMotivoAtraso as ResponseData<ITipoMotivoAtrasoResponse[]>;
       const motivollmada = res.motivollmada as ResponseData<ILlamadaCategoriaResponse[]>;
-      const tipohomologacion = res.tipohomologacion as ResponseData<ITipoHomologacionResponse[]>;
+      //const tipohomologacion = res.tipohomologacion as ResponseData<ITipoHomologacionResponse[]>;
       const homologacion = res.homologacion as ResponseData<IHomologacionResponse[]>;
       const casocategoria = res.casocategoria as ResponseData<ICasoCategoriaResponse[]>;
 
       const estatus = res.estatus as ResponseData<IEstatusResponse[]>;
       const tiposEnvios = res.TiposEnvios as ResponseData<ITipoEnvioEmailResponse[]>;
+      const sucursalZona = res.SucursalZona as ResponseData<ISucursalZonaFinanciera[]>;
 
       this.Categorias = categorias.data;
       this.AgentesAsignado = agentes.data;
@@ -1116,12 +1154,12 @@ export class EditarIncidenciaComponent implements OnInit {
       this.Prioridades = prioridades.data;
       this.TipoMotivoAtraso = tipoMotivoAtraso.data;
       this.LlamadaCategoria = motivollmada.data;
-      this.TipoHomologacion = tipohomologacion.data;
+      //this.TipoHomologacion = tipohomologacion.data;
       this.Homologacion = homologacion.data;
       this.CasoCategoria = casocategoria.data;
       this.Estatus = estatus.data;
       this.TipoEnvioEmail = tiposEnvios.data;
-
+      this.SucursalZonaFina = sucursalZona.data;
 
       this.cargarDatosIncidencia();
 
@@ -1133,11 +1171,31 @@ export class EditarIncidenciaComponent implements OnInit {
   onCasoCategoriaChange(caso: ICasoCategoriaResponse) {
 
 
-    var IdTipoHomologacionCategoria = caso.IdTipoHomologacionCategoria;
+    //var IdTipoHomologacionCategoria = caso.IdTipoHomologacionCategoria;
     var IdHomologacionCategoria = caso.IdHomologacionCategoria;
+    var IdCaso = caso.IdCasoCategoria;
+    const homo = this.Homologacion.filter(a => a.IdCasoCategoria === IdCaso);
+    console.log(homo)
+    if (homo.length <= 1) {
+      this.SelectHomologacion = homo;
+      this.readonlyH = true;
+      if (IdHomologacionCategoria == 1) {
+        this.mostrarHomologacion = true;
+      }
+      else {
+        this.mostrarHomologacion = false;
+      }
+      console.log(homo[0].IdHomologacionCategoria
+      )
+      this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(homo[0].IdHomologacionCategoria);
 
-    this.incidenciaForm.get('DatosIncidencia.TipoHomologacion')?.setValue(IdTipoHomologacionCategoria);
-    this.incidenciaForm.get('DatosIncidencia.Homologacion')?.setValue(IdHomologacionCategoria);
+    } else {
+      console.log(this.SelectHomologacion)
+      this.readonlyH = false;
+      this.SelectHomologacion = homo;
+      console.log(this.SelectHomologacion)
+    }
+
 
   }
 
@@ -1529,6 +1587,10 @@ export class EditarIncidenciaComponent implements OnInit {
     });
   }
 
+  onSelectionChangeSucursal(event: any) {
+    this.incidenciaForm.get('DatosPersonales.ZonaFinanciera')?.setValue(event.value.ZonaFinanciera);
+
+  }
   closeDialog() {
     this.dialog.close('close');
   }
@@ -1536,4 +1598,6 @@ export class EditarIncidenciaComponent implements OnInit {
   closeDialogEditar() {
     this.dialog.close('success');
   }
+
+
 }
